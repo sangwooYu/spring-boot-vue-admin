@@ -8,8 +8,8 @@
         <img class="pic-404__child right" :src="img_404_cloud" alt="404" />
       </div>
       <div class="tip-404">
-        <div class="tip-404__msg-404">请检查您输入的网址是否正确</div>
-        <a href="/" class="tip-404__return-home">返回首页</a>
+        <div class="tip-404__msg-404">입력한 URL이 올바른지 확인하세요.</div>
+        <a href="/" class="tip-404__return-home">맨 위로 가기</a>
       </div>
     </div>
   </div>

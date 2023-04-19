@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import IconSvg from '@/components/Icon-svg'// svg组件
+import IconSvg from '@/components/Icon-svg'// SVG 구성 요소
 
-// 注册全局组件
+// 글로벌 컴포넌트 등록
 Vue.component('icon-svg', IconSvg)
 
 const requireAll = requireContext => requireContext.keys().map(requireContext)

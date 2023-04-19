@@ -3,23 +3,23 @@ import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/token'
 
-// 创建axios实例
+// axios 인스턴스 생성
 // https://www.kancloud.cn/yunye/axios/234845
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
-  timeout: 5000, // 请求超时时间
-  // 所有请求都以Json形式传送
-  // 会有预检请求，服务端需要正常通过OPTIONS请求
+  baseURL: process.env.BASE_API, // API의 base_url
+  timeout: 5000, // 요청 시간 초과
+  // 모든 요청은 Json으로 전달됩니다.
+  // 사전 테스트 요청이 있을 것이며 서버는 옵션을 통해 정상적으로 요청해야 합니다.
   // http://www.ruanyifeng.com/blog/2016/04/cors
   headers: {
     'Content-type': 'application/json;charset=UTF-8'
   }
 })
 
-// request拦截器
+// 요청 인터셉터
 service.interceptors.request.use(config => {
   if (store.getters.token) {
-    // 让每个请求携带自定义token 请根据实际情况自行修改
+    // 각 요청에 사용자 지정 토큰을 포함하도록 설정하세요. 적절히 수정하세요.
     config.headers['Authorization'] = getToken()
   }
   return config
@@ -29,7 +29,7 @@ service.interceptors.request.use(config => {
   Promise.reject(error)
 })
 
-// response拦截器
+// 응답 인터셉터
 service.interceptors.response.use(
   response => {
     if (response.data.code === 200) {
@@ -44,11 +44,11 @@ service.interceptors.response.use(
     }
   },
   error => {
-    // 4002:需要认证
+    // 4002: 인증 필요
     if (error.response.data.code === 4002) {
-      MessageBox.confirm('需要登录！', '警告', {
-        confirmButtonText: '登录',
-        cancelButtonText: '取消',
+      MessageBox.confirm('로그인이 필요합니다!', '경고', {
+        confirmButtonText: '로그인',
+        cancelButtonText: '취소',
         type: 'warning'
       }).then(() => {
         store.dispatch('FedLogout').then(() => {

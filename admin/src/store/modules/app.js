@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-// 有效期 1 天
+// 1일 동안 유효
 const expires = 1
 
 const app = {

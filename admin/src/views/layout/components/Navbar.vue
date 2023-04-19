@@ -9,10 +9,10 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <router-link class="inlineBlock" to="/account/detail">
-          <el-dropdown-item>账户中心</el-dropdown-item>
+          <el-dropdown-item>계정 센터</el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
-          <span @click="logout" style="display:block;">注销</span>
+          <span @click="logout" style="display:block;">취소</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -38,7 +38,7 @@ export default {
     },
     logout() {
       this.$store.dispatch('Logout').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
+        location.reload() // vue-라우터 객체를 다시 인스턴스화하려면 버그 방지
       })
     }
   }

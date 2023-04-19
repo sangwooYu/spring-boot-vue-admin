@@ -28,7 +28,7 @@ export const constantRouterMap = [
     noDropDown: true,
     children: [{
       path: 'dashboard',
-      name: '控制台',
+      name: '콘솔',
       component: _import('dashboard/index'),
       meta: { title: 'dashboard', noCache: true }
     }]
@@ -36,7 +36,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  // mode: 'history', //后端支持可开
+  // mode: 'history', //백엔드 지원을 열 수 있습니다.
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
@@ -50,7 +50,7 @@ export const asyncRouterMap = [
     noDropDown: true,
     children: [{
       path: 'list',
-      name: '账户管理',
+      name: '계정 관리',
       component: _import('account/list'),
       meta: { permission: ['account:list'] }
     }]
@@ -63,7 +63,7 @@ export const asyncRouterMap = [
     hidden: true,
     children: [{
       path: 'detail',
-      name: '账户中心',
+      name: '계정 센터',
       component: _import('account/detail')
     }]
   },
@@ -76,7 +76,7 @@ export const asyncRouterMap = [
     noDropDown: true,
     children: [{
       path: 'list',
-      name: '角色管理',
+      name: '역할 관리',
       component: _import('role/list'),
       meta: { permission: ['role:list'] }
     }]

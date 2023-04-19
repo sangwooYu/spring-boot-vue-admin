@@ -29,8 +29,8 @@ export default {
 </script>
 
 <style lang="scss">
-// normalize.css 样式格式化
+// normalize.css 스타일 서식 지정
 @import '../node_modules/normalize.css/normalize.css';
-// 全局自定义的css样式
+// 글로벌 사용자 지정 CSS 스타일
 @import './styles/index.scss';
 </style>

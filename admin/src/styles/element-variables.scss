@@ -1,7 +1,7 @@
-/* 改变主题色变量 */
+/* 테마 색상 변수 변경 */
 $--color-primary: #409EFF;
 
-/* 改变 icon 字体路径变量，必需 */
+/* 아이콘 글꼴 경로 변수 변경, 필수 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @import "~element-ui/packages/theme-chalk/src/index";

@@ -9,13 +9,13 @@
     >
       <el-row :gutter="18">
         <el-col :span="9">
-          <el-form-item label="账户名" prop="name">
+          <el-form-item label="계정 이름" prop="name">
             <el-input v-if="toUpdate" v-model="tmpAccount.name" />
             <span v-else>{{ tmpAccount.name }}</span>
           </el-form-item>
         </el-col>
         <el-col :span="9">
-          <el-form-item label="邮箱" prop="email">
+          <el-form-item label="사서함" prop="email">
             <el-input v-if="toUpdate" v-model="tmpAccount.email" />
             <span v-else>{{ tmpAccount.email }}</span>
           </el-form-item>
@@ -23,34 +23,34 @@
       </el-row>
       <el-row :gutter="18">
         <el-col :span="9">
-          <el-form-item label="注册时间"><span>{{ unix2CurrentTime(account.registerTime) }}</span></el-form-item>
+          <el-form-item label="등록 시간"><span>{{ unix2CurrentTime(account.registerTime) }}</span></el-form-item>
         </el-col>
         <el-col :span="9">
-          <el-form-item label="最后登录时间"><span>{{ unix2CurrentTime(account.loginTime) }}</span></el-form-item>
+          <el-form-item label="마지막 로그인 시간"><span>{{ unix2CurrentTime(account.loginTime) }}</span></el-form-item>
         </el-col>
       </el-row>
       <el-form-item>
         <el-row :gutter="18">
           <el-col :span="6">
-            <el-button type="success" :loading="btnLoading" @click.native.prevent="regainAccountDetail">重新获取信息</el-button>
+            <el-button type="success" :loading="btnLoading" @click.native.prevent="regainAccountDetail">정보 검색</el-button>
           </el-col>
 
           <el-col :span="6" v-if="!toUpdate">
-            <el-button type="primary" :loading="btnLoading" @click.native.prevent="toUpdate = !toUpdate">修改信息</el-button>
+            <el-button type="primary" :loading="btnLoading" @click.native.prevent="toUpdate = !toUpdate">정보 수정</el-button>
           </el-col>
           <el-col :span="6" v-else>
-            <el-button type="primary" :loading="btnLoading" @click.native.prevent="updateDetail">确认修改</el-button>
-            <el-button type="warning" @click.native.prevent="toUpdate = !toUpdate">取消修改</el-button>
+            <el-button type="primary" :loading="btnLoading" @click.native.prevent="updateDetail">변경 사항 확인</el-button>
+            <el-button type="warning" @click.native.prevent="toUpdate = !toUpdate">수정 취소</el-button>
           </el-col>
-          
+
           <el-col :span="6">
-            <el-button type="danger" @click.native.prevent="showUpdatePasswordDialog">修改密码</el-button>
+            <el-button type="danger" @click.native.prevent="showUpdatePasswordDialog">비밀번호 변경</el-button>
           </el-col>
         </el-row>
       </el-form-item>
     </el-form>
 
-    <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
+    <el-dialog title="비밀번호 변경" :visible.sync="dialogFormVisible">
       <el-form
         status-icon
         class="small-space"
@@ -61,38 +61,38 @@
         :rules="updatePasswordRules"
         ref="tmpPassword"
       >
-        <el-form-item label="旧密码" prop="oldPassword" required>
+        <el-form-item label="이전 비밀번호" prop="oldPassword" required>
           <el-input
             type="password"
             prefix-icon="el-icon-edit"
             auto-complete="off"
-            placeholder="请输入旧密码"
+            placeholder="기존 비밀번호를 입력하세요."
             v-model="tmpPassword.oldPassword"
           />
         </el-form-item>
-        <el-form-item label="新密码" prop="newPassword" required>
+        <el-form-item label="새 비밀번호" prop="newPassword" required>
           <el-input
             type="password"
             prefix-icon="el-icon-edit"
             auto-complete="off"
-            placeholder="请输入新密码"
+            placeholder="새 비밀번호를 입력하세요."
             v-model="tmpPassword.newPassword"
           />
         </el-form-item>
-        <el-form-item label="新密码" prop="newPassword2" required>
+        <el-form-item label="새 비밀번호" prop="newPassword2" required>
           <el-input
             type="password"
             prefix-icon="el-icon-edit"
             auto-complete="off"
-            placeholder="请再次输入新密码"
+            placeholder="새 비밀번호를 다시 입력하세요."
             v-model="tmpPassword.newPassword2"
           />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click.native.prevent="dialogFormVisible = false">取消</el-button>
-        <el-button type="danger" @click.native.prevent="$refs['tmpPassword'].resetFields()">重置</el-button>
-        <el-button type="primary" :loading="btnLoading" @click.native.prevent="updatePassword">更新</el-button>
+        <el-button @click.native.prevent="dialogFormVisible = false">취소</el-button>
+        <el-button type="danger" @click.native.prevent="$refs['tmpPassword'].resetFields()">초기화</el-button>
+        <el-button type="primary" :loading="btnLoading" @click.native.prevent="updatePassword">업데이트</el-button>
       </div>
     </el-dialog>
   </div>
@@ -113,12 +113,12 @@ export default {
   data() {
     const validateOldPassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码长度必须在6或以上'))
+        callback(new Error('비밀번호 길이는 6자 이상이어야 합니다.'))
       }
       // promise异步查询后端密码
       this.validateOldPassword(value).then(isValidate => {
         if (!isValidate) {
-          callback(new Error('旧密码不正确'))
+          callback(new Error('이전 비밀번호가 올바르지 않습니다.'))
         } else {
           callback()
         }
@@ -126,32 +126,32 @@ export default {
     }
     const validateNewPassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码长度必须在6或以上'))
+        callback(new Error('비밀번호 길이는 6자 이상이어야 합니다.'))
       } else if (this.isOldNewPasswordSame()) {
-        callback(new Error('新旧密码不能一样'))
+        callback(new Error('이전 비밀번호와 새 비밀번호는 동일할 수 없습니다.'))
       } else {
         callback()
       }
     }
     const validateNewPassword2 = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码长度必须在6或以上'))
+        callback(new Error('비밀번호 길이는 6자 이상이어야 합니다.'))
       } else if (!this.isNewPasswordSame()) {
-        callback(new Error('两次输入的密码不一致'))
+        callback(new Error('두 번 입력한 비밀번호가 일치하지 않습니다.'))
       } else {
         callback()
       }
     }
     const validateName = (rule, value, callback) => {
       if (value.length < 3) {
-        callback(new Error('账户名长度必须在3或以上'))
+        callback(new Error('계정 이름은 3자 이상이어야 합니다.'))
       } else {
         callback()
       }
     }
     const validateEmail = (rule, value, callback) => {
       if (!isValidateEmail(value)) {
-        callback(new Error('邮箱格式错误'))
+        callback(new Error('잘못된 이메일 형식'))
       } else {
         callback()
       }
@@ -196,15 +196,15 @@ export default {
   methods: {
     unix2CurrentTime,
     /**
-     * 设置用户资料
+     * 사용자 프로필 설정
      */
     setDetail() {
       this.tmpAccount.name = this.account.name
       this.tmpAccount.email = this.account.email
     },
     /**
-     * 验证旧密码
-     * @param oldPassword 旧密码
+     * 이전 비밀번호 확인
+     * @param oldPassword 이전 비밀번호
      */
     validateOldPassword(oldPassword) {
       const account = {
@@ -214,26 +214,26 @@ export default {
       return validatePassword(account).then(response => response.data)
     },
     /**
-     * 新旧密码是否相同
+     * 이전 비밀번호와 새 비밀번호가 같은가요?
      */
     isOldNewPasswordSame() {
       return this.tmpPassword.oldPassword === this.tmpPassword.newPassword
     },
     /**
-     * 新密码1和2是否相同
+     * 새 비밀번호 1과 2가 같은가요?
      */
     isNewPasswordSame() {
       return this.tmpPassword.newPassword === this.tmpPassword.newPassword2
     },
     /**
-     * 重置token
+     * 토큰 재설정
      */
     resetToken(token) {
       setToken(token)
       this.account.token = token
     },
     /**
-     * 重新获取用户信息
+     * 사용자 정보 검색
      */
     regainAccountDetail() {
       this.loading = true
@@ -244,22 +244,22 @@ export default {
       })
     },
     /**
-     * 更新用户
-     * @param account 用户
+     * 사용자 업데이트
+     * @param account 사용자
      */
     updateAccount(account) {
       this.btnLoading = true
       updateAccount(account).then(response => {
-        this.$message.success('更新成功')
+        this.$message.success('업데이트 성공')
         this.resetToken(response.data)
         this.regainAccountDetail()
         this.btnLoading = false
       }).catch(res => {
-        this.$message.error('更新失败')
+        this.$message.error('업데이트 실패')
       })
     },
     /**
-     * 更新用户资料
+     * 사용자 정보 업데이트
      */
     updateDetail() {
       this.$refs.tmpAccount.validate(valid => {
@@ -270,7 +270,7 @@ export default {
       })
     },
     /**
-     * 显示更新密码对话框
+     * 비밀번호 업데이트 대화 상자 표시
      */
     showUpdatePasswordDialog() {
       this.dialogFormVisible = true
@@ -279,7 +279,7 @@ export default {
       this.tmpPassword.newPassword2 = ''
     },
     /**
-     * 更新密码
+     * 비밀번호 업데이트
      */
     updatePassword() {
       this.$refs.tmpPassword.validate(valid => {

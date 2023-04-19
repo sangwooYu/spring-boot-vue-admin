@@ -9,14 +9,14 @@
             icon="el-icon-refresh"
             v-if="hasPermission('role:list')"
             @click.native.prevent="getRoleList"
-          >刷新</el-button>
+          >새로 고침</el-button>
           <el-button
             type="primary"
             size="mini"
             icon="el-icon-plus"
             v-if="hasPermission('role:add')"
             @click.native.prevent="showAddRoleDialog"
-          >添加角色</el-button>
+          >역할 추가하기</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -33,15 +33,15 @@
           <span v-text="getTableIndex(scope.$index)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="角色名" align="center" prop="name" />
-      <el-table-column label="创建时间" align="center" prop="createTime">
+      <el-table-column label="캐릭터 이름" align="center" prop="name" />
+      <el-table-column label="생성 시간" align="center" prop="createTime">
         <template slot-scope="scope">{{ unix2CurrentTime(scope.row.createTime) }}</template>
       </el-table-column>
-      <el-table-column label="修改时间" align="center" prop="updateTime">
+      <el-table-column label="시간 수정" align="center" prop="updateTime">
         <template slot-scope="scope">{{ unix2CurrentTime(scope.row.updateTime) }}</template>
       </el-table-column>
       <el-table-column
-        label="管理"
+        label="관리"
         align="center"
         v-if="hasPermission('role:detail') || hasPermission('role:update') || hasPermission('role:delete')"
       >
@@ -51,19 +51,19 @@
             size="mini"
             v-if="hasPermission('role:detail')"
             @click.native.prevent="showRoleDialog(scope.$index)"
-          >查看</el-button>
+          >보기</el-button>
           <el-button
             type="warning"
             size="mini"
-            v-if="hasPermission('role:update') && scope.row.name !== '超级管理员'"
+            v-if="hasPermission('role:update') && scope.row.name !== '슈퍼 관리자'"
             @click.native.prevent="showUpdateRoleDialog(scope.$index)"
-          >修改</el-button>
+          >수정 사항</el-button>
           <el-button
             type="danger"
             size="mini"
-            v-if="hasPermission('role:delete') && scope.row.name !== '超级管理员'"
+            v-if="hasPermission('role:delete') && scope.row.name !== '슈퍼 관리자'"
             @click.native.prevent="removeRole(scope.$index)"
-          >删除</el-button>
+          >삭제</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -88,7 +88,7 @@
         :rules="createRules"
         ref="tempRole"
       >
-        <el-form-item label="角色名" prop="name" required>
+        <el-form-item label="캐릭터 이름" prop="name" required>
           <el-input
             :disabled="dialogStatus === 'show'"
             type="text"
@@ -97,7 +97,7 @@
             v-model="tempRole.name"
           ></el-input>
         </el-form-item>
-        <el-form-item label="权限" required>
+        <el-form-item label="권한" required>
           <div v-for="(permission, index) in permissionList" :key="index">
             <el-button
               :disabled="dialogStatus === 'show'"
@@ -121,19 +121,19 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click.native.prevent="dialogFormVisible = false">取消</el-button>
+        <el-button @click.native.prevent="dialogFormVisible = false">취소</el-button>
         <el-button
           v-if="dialogStatus === 'add'"
           type="success"
           :loading="btnLoading"
           @click.native.prevent="addRole"
-        >添加</el-button>
+        >추가</el-button>
         <el-button
           v-if="dialogStatus === 'update'"
           type="primary"
           :loading="btnLoading"
           @click.native.prevent="updateRole"
-        >更新</el-button>
+        >업데이트</el-button>
       </div>
     </el-dialog>
   </div>
@@ -160,14 +160,14 @@ export default {
   },
   data() {
     /**
-     * 验证角色名
-     * @param rule 规则
-     * @param value 角色名
-     * @param callback 回调
+     * 역할 이름 확인
+     * @param rule 규칙
+     * @param value 캐릭터 이름
+     * @param callback 콜백
      */
     const validateRoleName = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('角色名不能为空'))
+        callback(new Error('캐릭터 이름은 비워둘 수 없습니다.'))
       } else {
         callback()
       }
@@ -184,8 +184,8 @@ export default {
       dialogStatus: 'add',
       dialogFormVisible: false,
       textMap: {
-        update: '修改角色',
-        add: '添加角色'
+        update: '캐릭터 수정',
+        add: '캐릭터 수정'
       },
       btnLoading: false,
       tempRole: {
@@ -204,17 +204,17 @@ export default {
   methods: {
     unix2CurrentTime,
     /**
-     * 获取所有角色权限
+     * 모든 역할에 액세스하기
      */
     getPermissionList() {
       listResourcePermission().then(response => {
         this.permissionList = response.data.list
       }).catch(res => {
-        this.$message.error('加载权限列表失败')
+        this.$message.error('권한 목록을 로드하지 못했습니다.')
       })
     },
     /**
-     * 获取角色列表
+     * 문자 목록 가져오기
      */
     getRoleList() {
       this.listLoading = true
@@ -223,12 +223,12 @@ export default {
         this.total = response.data.total
         this.listLoading = false
       }).catch(res => {
-        this.$message.error('加载角色列表失败')
+        this.$message.error('역할 목록을 로드하지 못했습니다.')
       })
     },
     /**
-     * 改变每页数量
-     * @param size 页大小
+     * 페이지당 페이지 수 변경
+     * @param size 페이지 크기
      */
     handleSizeChange(size) {
       this.listQuery.page = 1
@@ -236,23 +236,23 @@ export default {
       this.getRoleList()
     },
     /**
-     * 改变页码
-     * @param page 页号
+     * 페이지 번호 변경
+     * @param page 페이지 번호
      */
     handleCurrentChange(page) {
       this.listQuery.page = page
       this.getRoleList()
     },
     /**
-     * 表格序号
-     * @param index 数据下标
-     * @returns 表格序号
+     * 양식 일련 번호
+     * @param index 데이터 구독
+     * @returns 양식 일련 번호
      */
     getTableIndex(index) {
       return (this.listQuery.page - 1) * this.listQuery.size + index + 1
     },
     /**
-     * 显示新增角色对话框
+     * 새 역할 표시 대화 상자
      */
     showAddRoleDialog() {
       this.dialogFormVisible = true
@@ -262,8 +262,8 @@ export default {
       this.tempRole.permissionIdList = []
     },
     /**
-     * 显示更新角色的对话框
-     * @param index 角色下标
+     * 역할 업데이트를 위한 대화 상자 표시
+     * @param index 문자 아래 첨자
      */
     showUpdateRoleDialog(index) {
       this.dialogFormVisible = true
@@ -281,8 +281,8 @@ export default {
       }
     },
     /**
-     * 显示角色权限的对话框
-     * @param index 角色下标
+     * 역할 권한을 표시하는 대화 상자
+     * @param index 문자 아래 첨자
      */
     showRoleDialog(index) {
       this.dialogFormVisible = true
@@ -292,7 +292,7 @@ export default {
       this.tempRole.id = role.id
       this.tempRole.permissionIdList = []
       let resourceList = []
-      if (role.name === '超级管理员') {
+      if (role.name === '슈퍼 관리자') {
         resourceList = this.permissionList
       } else {
         resourceList = role.resourceList
@@ -306,7 +306,7 @@ export default {
       }
     },
     /**
-     * 添加新角色
+     * 새 캐릭터 추가
      */
     addRole() {
       this.$refs.tempRole.validate(valid => {
@@ -316,20 +316,20 @@ export default {
         ) {
           this.btnLoading = true
           addRole(this.tempRole).then(() => {
-            this.$message.success('添加成功')
+            this.$message.success('추가 성공')
             this.getRoleList()
             this.dialogFormVisible = false
             this.btnLoading = false
           }).catch(res => {
-            this.$message.error('添加角色失败')
+            this.$message.error('문자 추가에 실패했습니다.')
           })
         } else {
-          console.log('表单无效')
+          console.log('양식 유효하지 않음')
         }
       })
     },
     /**
-     * 修改角色
+     * 캐릭터 수정
      */
     updateRole() {
       this.$refs.tempRole.validate(valid => {
@@ -339,58 +339,58 @@ export default {
         ) {
           this.btnLoading = true
           updateRole(this.tempRole).then(() => {
-            this.$message.success('更新成功')
+            this.$message.success('업데이트 성공')
             this.getRoleList()
             this.dialogFormVisible = false
             this.btnLoading = false
           }).catch(res => {
-            this.$message.error('更新角色失败')
+            this.$message.error('캐릭터 업데이트 실패')
           })
         } else {
-          console.log('表单无效')
+          console.log('양식 유효하지 않음')
         }
       })
     },
     /**
-     * 校验角色名是否已经存在
-     * @param id 角色id
-     * @param name 角色名
+     * 역할 이름이 이미 존재하는지 확인
+     * @param id 캐릭터 ID
+     * @param name 캐릭터 이름
      * @returns {boolean}
      */
     isRoleNameUnique(id, name) {
       for (let i = 0; i < this.roleList.length; i++) {
         if (this.roleList[i].id !== id && this.roleList[i].name === name) {
-          this.$message.error('角色名已存在')
+          this.$message.error('캐릭터 이름이 이미 존재합니다.')
           return false
         }
       }
       return true
     },
     /**
-     * 移除角色
-     * @param index 角色下标
+     * 문자 제거
+     * @param index 문자 아래 첨자
      * @returns {boolean}
      */
     removeRole(index) {
-      this.$confirm('删除该角色？', '警告', {
-        confirmButtonText: '是',
-        cancelButtonText: '否',
+      this.$confirm('역할을 삭제하시겠습니까?', '경고', {
+        confirmButtonText: '예',
+        cancelButtonText: '아니오',
         type: 'warning'
       }).then(() => {
         const roleId = this.roleList[index].id
         remove(roleId).then(() => {
-          this.$message.success('删除成功')
+          this.$message.success('성공적으로 삭제됨')
           this.getRoleList()
         }).catch(() => {
-          this.$message.error('删除失败')
+          this.$message.error('삭제하지 못함')
         })
       }).catch(() => {
-        this.$message.info('已取消删除')
+        this.$message.info('삭제됨')
       })
     },
     /**
-     * 判断角色菜单内的权限是否一个都没选
-     * @param index 下标
+     * 역할 메뉴에서 선택된 권한이 없는지 확인합니다.
+     * @param index 구독
      * @returns {boolean}
      */
     isMenuNone(index) {
@@ -403,8 +403,8 @@ export default {
       return true
     },
     /**
-     * 判断角色菜单内的权限是否全选了
-     * @param index 下标
+     * 역할 메뉴의 모든 권한이 선택되어 있는지 확인합니다.
+     * @param index 구독
      * @returns {boolean}
      */
     isMenuAll(index) {
@@ -417,21 +417,21 @@ export default {
       return true
     },
     /**
-     * 根据菜单状态check所有checkbox
-     * @param index 下标
+     * 메뉴 상태에 따라 모든 확인란을 선택합니다.
+     * @param index 구독
      */
     checkAll(index) {
       if (this.isMenuAll(index)) {
-        // 如果已经全选了,则全部取消
+        // 모두 선택한 경우 모두 취소합니다.
         this.cancelAll(index)
       } else {
-        // 如果尚未全选,则全选
+        // 아직 선택하지 않은 경우 모두 선택
         this.selectAll(index)
       }
     },
     /**
-     * checkbox全部选中
-     * @param index 下标
+     * checkbox모두 선택
+     * @param index 구독
      */
     selectAll(index) {
       const handleList = this.permissionList[index].handleList
@@ -440,8 +440,8 @@ export default {
       }
     },
     /**
-     * checkbox全部取消选中
-     * @param index 下标
+     * checkbox모두선택
+     * @param index 구독
      */
     cancelAll(index) {
       const handleList = this.permissionList[index].handleList
@@ -453,24 +453,24 @@ export default {
       }
     },
     /**
-     * 本方法会在勾选状态改变之后触发
-     * @param item 选项
-     * @param index 对应下标
+     * 이 메서드는 틱 상태가 변경된 후 트리거됩니다.
+     * @param item 옵션
+     * @param index 해당 구독
      */
     handleChecked(item, index) {
       if (this.tempRole.permissionIdList.indexOf(item.id) > -1) {
-        // 选中事件
-        // 如果之前未勾选本权限,现在勾选完之后,tempRole里就会包含本id
-        // 那么就要将必选的权限勾上
+        // 선택한 이벤트
+        // 이 권한이 이전에 확인되지 않은 경우, 확인 시 이 ID가 임시 역할에 포함됩니다.
+        // 그런 다음 필수 권한을 선택합니다.
         this.makePermissionChecked(index)
       } else {
-        // 取消选中事件
+        // 이벤트 선택 취소
         this.cancelAll(index)
       }
     },
     /**
-     * 将角色菜单必选的权限勾上（这里并没有做必选的数据库字段）
-     * @param index 权限对应下标
+     * 역할 메뉴의 필수 권한을 선택합니다(여기에는 필수 데이터베이스 필드가 없습니다).
+     * @param index 권한은 구독에 해당합니다.
      */
     makePermissionChecked(index) {
       const handleList = this.permissionList[index].handleList
@@ -479,9 +479,9 @@ export default {
       }
     },
     /**
-     * 数组内防重复地添加元素
-     * @param val 值
-     * @param arr 数组
+     * 배열에 반복 방지 요소 추가하기
+     * @param val 가치
+     * @param arr 배열
      */
     addUnique(val, arr) {
       const _index = arr.indexOf(val)

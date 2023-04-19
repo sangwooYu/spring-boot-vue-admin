@@ -1,7 +1,7 @@
 import { asyncRouterMap, constantRouterMap } from '@/router/index'
 
 /**
- * 通过meta.auth判断是否与当前用户权限匹配
+ * meta.auth를 통해 현재 사용자의 권한과 일치하는지 확인합니다.
  * @param permissionCodeList
  * @param route
  */
@@ -14,18 +14,18 @@ function hasPermission(permissionCodeList, route) {
 }
 
 /**
- * 递归过滤异步路由表，返回符合用户角色权限的路由表
+ * 비동기 라우팅 테이블을 재귀적으로 필터링하여 사용자의 역할 권한과 일치하는 라우팅 테이블을 반환합니다.
  * @param asyncRouterMap
  * @param permissionCodeList
  */
 function filterAsyncRouter(asyncRouterMap, permissionCodeList) {
   return asyncRouterMap.filter(route => {
-    // filter,js语法里数组的过滤筛选方法
+    // 배열을 필터링하는 필터, JS 구문
     if (hasPermission(permissionCodeList, route)) {
       if (route.children && route.children.length) {
-        // 如果这个路由下面还有下一级的话,就递归调用
+        // 이 경로 아래에 다음 단계가 있는 경우 재귀적으로 호출합니다.
         route.children = filterAsyncRouter(route.children, permissionCodeList)
-        // 如果过滤一圈后,没有子元素了,这个父级菜单就也不显示了
+        // 필터링 후 더 이상 하위 요소가 없는 경우 상위 메뉴도 표시되지 않습니다.
         // return (route.children && route.children.length)
       }
       return true
@@ -36,13 +36,13 @@ function filterAsyncRouter(asyncRouterMap, permissionCodeList) {
 
 const permission = {
   state: {
-    routers: constantRouterMap, // 本用户所有的路由,包括了固定的路由和下面的addRouters
-    addRouters: [] // 本用户的角色赋予的新增的动态路由
+    routers: constantRouterMap, // 고정 경로 및 다음 추가 라우터를 포함하여 이 사용자에 대한 모든 경로
+    addRouters: [] // 이 사용자의 역할에 의해 제공되는 새로운 동적 경로
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers
-      state.routers = constantRouterMap.concat(routers) // 将固定路由和新增路由进行合并, 成为本用户最终的全部路由信息
+      state.routers = constantRouterMap.concat(routers) // 고정 경로와 새 경로를 결합하여 이 사용자에 대한 최종 경로 정보가 됩니다.
     }
   },
   actions: {
@@ -50,17 +50,17 @@ const permission = {
       return new Promise(resolve => {
         const role = account.roleName
         const permissionCodeList = account.permissionCodeList
-        // 声明 该角色可用的路由
+        // 역할에 사용할 수 있는 경로를 선언합니다.
         let accessedRouters
-        if (role === '超级管理员') {
-          // 如果角色里包含'超级管理员',那么所有的路由都可以用
-          // 其实管理员也拥有全部菜单,这里主要是利用角色判断,节省加载时间
+        if (role === '슈퍼 관리자') {
+          // 역할에 '슈퍼 관리자'가 포함되어 있으면 모든 경로를 사용할 수 있습니다.
+          // 실제로 관리자에게도 모든 메뉴가 있으며, 여기서 주된 목적은 역할 판단을 사용하여 로딩 시간을 절약하는 것입니다.
           accessedRouters = asyncRouterMap
         } else {
-          // 否则需要通过以下方法来筛选出本角色可用的路由
+          // 그렇지 않으면 이 역할에 사용할 수 있는 경로를 다음을 기준으로 필터링해야 합니다.
           accessedRouters = filterAsyncRouter(asyncRouterMap, permissionCodeList)
         }
-        // 执行设置路由的方法
+        // 경로 설정 방법을 실행합니다.
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })

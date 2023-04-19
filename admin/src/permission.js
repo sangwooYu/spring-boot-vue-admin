@@ -1,27 +1,27 @@
 import router from './router'
 import store from './store'
-import NProgress from 'nprogress' // Progress 进度条
-import 'nprogress/nprogress.css'// Progress 进度条样式
+import NProgress from 'nprogress' // 진행률 표시줄
+import 'nprogress/nprogress.css'// 진행률 표시줄 스타일
 import { getToken } from '@/utils/token'
 
-const whiteList = ['/login'] // 白名单,不需要登录的路由
+const whiteList = ['/login'] // 화이트리스트, 로그인 필요 없는 경로
 
 router.beforeEach((to, from, next) => {
-  NProgress.start() // 开始Progress
-  // 尝试获取cookie中的token
+  NProgress.start() // 진행 시작
+  // 쿠키에서 토큰을 가져옵니다.
   if (getToken()) {
-    // 有token
+    // token 있으면
     if (to.path === '/login') {
-      // 但下一跳是登陆页
-      // 转到首页
+      // 하지만 다음 단계는 랜딩 페이지입니다.
+      // 홈 페이지로 이동
       next({ path: '/' })
     } else {
-      // 下一跳不是登陆页
-      // VUEX被清除，没有角色名
+      // 다음 점프는 랜딩 페이지가 아닙니다.
+      // VUEX 지워짐, 캐릭터 이름 없음
       if (store.getters.roleName === null) {
-        // 重新获取用户信息
+        // 사용자 정보 검색
         store.dispatch('Detail').then(response => {
-          // 生成路由
+          // 경로 생성
           store.dispatch('GenerateRoutes', response.data).then(() => {
             router.addRoutes(store.getters.addRouters)
             next({ ...to })
@@ -32,17 +32,17 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    // 如果前往的路径是白名单内的,就可以直接前往
+    // 이동하려는 경로가 화이트리스트에 있는 경우 직접
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      // 如果路径不是白名单内的,而且又没有登录,就转到登录页
+      // 경로가 화이트리스트에 등록되지 않았고 로그인하지 않은 경우 로그인 페이지로 리디렉션됩니다.
       next('/login')
-      NProgress.done() // 结束Progress
+      NProgress.done() // 진행 상황 종료
     }
   }
 })
 
 router.afterEach(() => {
-  NProgress.done() // 结束Progress
+  NProgress.done() // 진행 상황 종료
 })

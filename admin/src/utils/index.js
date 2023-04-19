@@ -1,6 +1,6 @@
 /**
- * Unix时间戳转换成日期格式  unix2CurrentTime("1497232433000")
- * @param unixTime Unix时间戳
+ * 유닉스 타임스탬프에서 날짜 형식까지  unix2CurrentTime("1497232433000")
+ * @param unixTime 유닉스 타임스탬프
  * @return string yyyy-MM-dd HH:mm:ss
  */
 export function unix2CurrentTime(unixTime) {
@@ -20,28 +20,28 @@ export function unix2CurrentTime(unixTime) {
 }
 
 /**
- * 两个Unix时间戳差值
- * @param unixTimeStart Unix时间戳1
- * @param unixTimeEnd Unix时间戳2
- * @return string xx 小时 | xx 天
+ * 두 Unix 타임스탬프의 차이점
+ * @param unixTimeStart 유닉스 타임스탬프 1
+ * @param unixTimeEnd 유닉스 타임스탬프 2
+ * @return string xx 시간 | xx 일
  */
 export function unixDifference(unixTimeStart, unixTimeEnd) {
   const difference = (unixTimeEnd - unixTimeStart) / 1000
   if (difference >= 86400) {
-    return difference / 86400 + '天'
+    return difference / 86400 + '일'
   } else if (difference >= 3600) {
-    return difference / 3600 + '小时'
+    return difference / 3600 + '시간'
   } else if (difference >= 60) {
-    return difference / 60 + '分钟'
+    return difference / 60 + '분'
   } else {
-    return difference + '秒'
+    return difference + '초'
   }
 }
 
 /**
- * 当前Unix时间戳差值
- * @param unixTimeEnd Unix时间戳
- * @return string | null xx天xx小时xx分钟xx秒
+ * 현재 유닉스 타임스탬프 차이
+ * @param unixTimeEnd 유닉스 타임스탬프
+ * @return string | null xx일 xx시간 xx분 xx초
  */
 export function nowDifference(unixTimeEnd) {
   const unixTimeStart = new Date().getTime()
@@ -55,7 +55,7 @@ export function nowDifference(unixTimeEnd) {
     if (hour <= 9) hour = '0' + hour
     if (minute <= 9) minute = '0' + minute
     if (second <= 9) second = '0' + second
-    return day + '天' + hour + '小时' + minute + '分钟' + second + '秒'
+    return day + '일' + hour + '시간' + minute + '분' + second + '초'
   } else {
     return null
   }

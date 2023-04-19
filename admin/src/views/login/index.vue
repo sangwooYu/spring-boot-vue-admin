@@ -10,7 +10,7 @@
       label-position="left"
       label-width="0px"
     >
-      <h3 class="title">后台登录</h3>
+      <h3 class="title">백오피스 로그인</h3>
       <el-form-item prop="nameOrEmail">
         <span class="svg-container svg-container_login">
           <icon-svg icon-class="name" />
@@ -19,7 +19,7 @@
           type="text"
           autocomplete="on"
           v-model="loginForm.nameOrEmail"
-          placeholder="请输入账户名或邮箱"
+          placeholder="계정 이름 또는 이메일 주소를 입력하세요."
           @keyup.enter.native="handleLogin"
         />
       </el-form-item>
@@ -31,7 +31,7 @@
           :type="passwordType"
           autocomplete="on"
           v-model="loginForm.password"
-          placeholder="请输入密码"
+          placeholder="비밀번호를 입력하세요."
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click.native.prevent="showPwd">
@@ -44,7 +44,7 @@
           style="width:100%;"
           :loading="btnLoading"
           @click.native.prevent="handleLogin"
-        >登录</el-button>
+        >로그인</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -58,14 +58,14 @@ export default {
   data() {
     const validateNameOrEmail = (rule, value, callback) => {
       if (value.length < 3) {
-        callback(new Error('账户名长度必须在3或以上'))
+        callback(new Error('계정 이름은 3자 이상이어야 합니다.'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码长度必须在6或以上'))
+        callback(new Error('비밀번호 길이는 6자 이상이어야 합니다.'))
       } else {
         callback()
       }

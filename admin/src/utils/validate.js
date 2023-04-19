@@ -1,5 +1,5 @@
 /**
- * url地址
+ * url
  * @param url
  * @returns {boolean}
  */
@@ -9,7 +9,7 @@ export function isValidateURL(url) {
 }
 
 /**
- * 小写字母
+ * 소문자
  * @param str
  * @returns {boolean}
  */
@@ -19,7 +19,7 @@ export function isValidateLowerCase(str) {
 }
 
 /**
- * 大写字母
+ * 대문자
  * @param str
  * @returns {boolean}
  */
@@ -29,7 +29,7 @@ export function isValidateUpperCase(str) {
 }
 
 /**
- * 邮箱
+ * 사서함
  * @param email
  * @returns {boolean}
  */

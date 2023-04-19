@@ -9,30 +9,30 @@
             icon="el-icon-refresh"
             v-if="hasPermission('account:list')"
             @click.native.prevent="getAccountList"
-          >刷新</el-button>
+          >새로 고침</el-button>
           <el-button
             type="primary"
             size="mini"
             icon="el-icon-plus"
             v-if="hasPermission('account:add')"
             @click.native.prevent="showAddAccountDialog"
-          >添加账号</el-button>
+          >계정 추가</el-button>
         </el-form-item>
 
         <span v-if="hasPermission('account:search')">
           <el-form-item>
-            <el-input v-model="search.accountName" placeholder="账户名"></el-input>
+            <el-input v-model="search.accountName" placeholder="계정 이름"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="search.roleName" placeholder="角色">
-              <el-option label="请选择" value />
+            <el-select v-model="search.roleName" placeholder="역할">
+              <el-option label="선택하세요" value />
               <div v-for="(role, index) in roleList" :key="index">
                 <el-option :label="role.name" :value="role.name"/>
               </div>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="searchBy" :loading="btnLoading">查询</el-button>
+            <el-button type="primary" @click="searchBy" :loading="btnLoading">문의</el-button>
           </el-form-item>
         </span>
       </el-form>
@@ -50,16 +50,16 @@
           <span v-text="getIndex(scope.$index)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="账户名" align="center" prop="name" width="180" />
-      <el-table-column label="邮箱" align="center" prop="email" width="200" />
-      <el-table-column label="注册时间" align="center" prop="registerTime" width="160">
+      <el-table-column label="계정 이름" align="center" prop="name" width="180" />
+      <el-table-column label="사서함" align="center" prop="email" width="200" />
+      <el-table-column label="등록 시간" align="center" prop="registerTime" width="160">
         <template slot-scope="scope">{{ unix2CurrentTime(scope.row.registerTime) }}</template>
       </el-table-column>
-      <el-table-column label="最后登录时间" align="center" prop="loginTime" width="160">
-        <template slot-scope="scope">{{ scope.row.loginTime ? unix2CurrentTime(scope.row.loginTime) : '从未登录' }}</template>
+      <el-table-column label="마지막 로그인 시간" align="center" prop="loginTime" width="160">
+        <template slot-scope="scope">{{ scope.row.loginTime ? unix2CurrentTime(scope.row.loginTime) : '로그인하지 않음' }}</template>
       </el-table-column>
-      <el-table-column label="角色" align="center" prop="roleName" width="120" />
-      <el-table-column label="管理" align="center"
+      <el-table-column label="역할" align="center" prop="roleName" width="120" />
+      <el-table-column label="관리" align="center"
         v-if="hasPermission('role:update') || hasPermission('account:update') || hasPermission('account:delete')">
         <template slot-scope="scope">
           <el-button
@@ -67,19 +67,19 @@
             size="mini"
             v-if="hasPermission('role:update') && scope.row.id !== accountId"
             @click.native.prevent="showUpdateAccountDialog(scope.$index)"
-          >账户</el-button>
+          >계정</el-button>
           <el-button
             type="warning"
             size="mini"
             v-if="hasPermission('account:update') && scope.row.id !== accountId"
             @click.native.prevent="showUpdateAccountRoleDialog(scope.$index)"
-          >角色</el-button>
+          >역할</el-button>
           <el-button
             type="danger"
             size="mini"
             v-if="hasPermission('account:delete') && scope.row.id !== accountId"
             @click.native.prevent="removeAccount(scope.$index)"
-          >删除</el-button>
+          >삭제</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -103,7 +103,7 @@
         :rules="createRules"
         ref="tmpAccount"
       >
-        <el-form-item label="账户名" prop="name" required>
+        <el-form-item label="계정 이름" prop="name" required>
           <el-input
             type="text"
             prefix-icon="el-icon-edit"
@@ -112,7 +112,7 @@
             v-model="tmpAccount.name"
           />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item label="사서함" prop="email">
           <el-input
             type="text"
             prefix-icon="el-icon-message"
@@ -121,7 +121,7 @@
             v-model="tmpAccount.email"
           />
         </el-form-item>
-        <el-form-item label="密码" prop="password" required
+        <el-form-item label="비밀번호" prop="password" required
         v-if="dialogStatus !== 'updateRole'">
           <el-input
             type="password"
@@ -131,38 +131,38 @@
             v-if="dialogStatus !== 'updateRole'"
           />
         </el-form-item>
-        <el-form-item label="角色"
+        <el-form-item label="역할"
           v-if="dialogStatus === 'updateRole'">
-          <el-select placeholder="请选择" v-model="tmpAccount.roleId">
+          <el-select placeholder="선택하세요" v-model="tmpAccount.roleId">
             <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click.native.prevent="dialogFormVisible = false">取消</el-button>
+        <el-button @click.native.prevent="dialogFormVisible = false">취소</el-button>
         <el-button
           type="danger"
           v-if="dialogStatus === 'add'"
           @click.native.prevent="$refs['tmpAccount'].resetFields()"
-        >重置</el-button>
+        >초기화</el-button>
         <el-button
           type="success"
           v-if="dialogStatus === 'add'"
           :loading="btnLoading"
           @click.native.prevent="addAccount"
-        >添加</el-button>
+        >추가</el-button>
         <el-button
           type="primary"
           v-if="dialogStatus === 'update'"
           :loading="btnLoading"
           @click.native.prevent="updateAccount"
-        >更新资料</el-button>
+        >정보 업데이트</el-button>
         <el-button
           type="primary"
           v-if="dialogStatus === 'updateRole'"
           :loading="btnLoading"
           @click.native.prevent="updateAccountRole"
-        >更新角色</el-button>
+        >역할 업데이트</el-button>
       </div>
     </el-dialog>
   </div>
@@ -186,49 +186,49 @@ export default {
   data() {
     const validateEmail = (rule, value, callback) => {
       if (!isValidateEmail(value)) {
-        callback(new Error('邮箱格式错误'))
+        callback(new Error('잘못된 이메일 형식'))
       } else {
         callback()
       }
     }
     const validateName = (rule, value, callback) => {
       if (value.length < 3) {
-        callback(new Error('账户名长度必须 ≥ 3'))
+        callback(new Error('계정 이름 길이는 3 이상이어야 합니다.'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码长度必须 ≥ 6'))
+        callback(new Error('비밀번호 길이는 6 이상이어야 합니다.'))
       } else {
         callback()
       }
     }
     return {
-      accountList: [], // 用户列表
-      roleList: [], // 全部角色
-      filterRoleNameList: [], // 用于过滤表格角色的列表 http://element-cn.eleme.io/#/zh-CN/component/table#shai-xuan
-      listLoading: false, // 数据加载等待动画
-      total: 0, // 数据总数
+      accountList: [], // 사용자 목록
+      roleList: [], // 모든 역할
+      filterRoleNameList: [], // 테이블 역할 필터링 목록 http://element-cn.eleme.io/#/zh-CN/component/table#shai-xuan
+      listLoading: false, // 데이터 로딩 대기 애니메이션
+      total: 0, // 총 데이터
       listQuery: {
-        page: 1, // 页码
-        size: 9 // 每页数量
+        page: 1, // 페이지
+        size: 9 // 페이지당 개수
       },
       dialogStatus: 'add',
       dialogFormVisible: false,
       textMap: {
-        updateRole: '修改账号角色',
-        update: '修改账号',
-        add: '添加账号'
+        updateRole: '계정 역할 수정',
+        update: '계정 번호 수정',
+        add: '계정 추가'
       },
-      btnLoading: false, // 按钮等待动画
+      btnLoading: false, // 버튼 대기 애니메이션
       tmpAccount: {
         accountId: '',
         email: '',
         name: '',
         password: '',
-        roleId: 2 // 对应后端数据库普通用户角色Id
+        roleId: 2 // 백엔드 데이터베이스 공통 사용자 역할 Id에 해당합니다.
       },
       search: {
         page: null,
@@ -251,17 +251,17 @@ export default {
   methods: {
     unix2CurrentTime,
     /**
-     * 获取所有角色
+     * 모든 캐릭터 가져오기
      */
     getRoleList() {
       getRoleList().then(response => {
         this.roleList = response.data.list
       }).catch(res => {
-        this.$message.error('加载角色失败')
+        this.$message.error('역할을 로드하지 못했습니다.')
       })
     },
     /**
-     * 获取用户列表
+     * 사용자 목록 가져오기
      */
     getAccountList() {
       this.listLoading = true
@@ -276,7 +276,7 @@ export default {
         }
         this.listLoading = false
       }).catch(res => {
-        this.$message.error('加载账户列表失败')
+        this.$message.error('계정 목록을 로드하지 못했습니다.')
       })
     },
     searchBy() {
@@ -290,12 +290,12 @@ export default {
         this.listLoading = false
         this.btnLoading = false
       }).catch(res => {
-        this.$message.error('搜索失败')
+        this.$message.error('검색 실패')
       })
     },
     /**
-     * 改变每页数量
-     * @param size 页大小
+     * 페이지당 페이지 수 변경
+     * @param size 페이지 크기
      */
     handleSizeChange(size) {
       this.listQuery.size = size
@@ -303,28 +303,28 @@ export default {
       this.getAccountList()
     },
     /**
-     * 改变页码
-     * @param page 页号
+     * 페이지 번호 변경
+     * @param page 페이지 번호
      */
     handleCurrentChange(page) {
       this.listQuery.page = page
       this.getAccountList()
     },
     /**
-     * 表格序号
-     * 可参考自定义表格序号
+     * 양식 일련 번호
+     * 사용자 지정 양식 일련번호 참조
      * http://element-cn.eleme.io/#/zh-CN/component/table#zi-ding-yi-suo-yin
-     * @param index 数据下标
-     * @returns 表格序号
+     * @param index 데이터 구독
+     * @returns 양식 일련 번호
      */
     getIndex(index) {
       return (this.listQuery.page - 1) * this.listQuery.size + index + 1
     },
     /**
-     * 显示添加用户对话框
+     * 사용자 추가 대화 상자 표시
      */
     showAddAccountDialog() {
-      // 显示新增对话框
+      // 새 대화 상자 표시
       this.dialogFormVisible = true
       this.dialogStatus = 'add'
       this.tmpAccount.email = ''
@@ -332,27 +332,27 @@ export default {
       this.tmpAccount.password = ''
     },
     /**
-     * 添加用户
+     * 사용자 추가
      */
     addAccount() {
       this.$refs.tmpAccount.validate(valid => {
         if (valid && this.isUniqueDetail(this.tmpAccount)) {
           this.btnLoading = true
           register(this.tmpAccount).then(() => {
-            this.$message.success('添加成功')
+            this.$message.success('추가 성공')
             this.getAccountList()
             this.dialogFormVisible = false
             this.btnLoading = false
           }).catch(res => {
-            this.$message.error('添加账户失败')
+            this.$message.error('계정을 추가하지 못했습니다.')
             this.btnLoading = false
           })
         }
       })
     },
     /**
-     * 显示修改用户对话框
-     * @param index 用户下标
+     * 사용자 수정 대화 상자 표시
+     * @param index 사용자 구독
      */
     showUpdateAccountDialog(index) {
       this.dialogFormVisible = true
@@ -364,20 +364,20 @@ export default {
       this.tmpAccount.roleId = this.accountList[index].roleId
     },
     /**
-     * 更新用户
+     * 사용자 업데이트
      */
     updateAccount() {
       updateAccount(this.tmpAccount).then(() => {
-        this.$message.success('更新成功')
+        this.$message.success('업데이트 성공')
         this.getAccountList()
         this.dialogFormVisible = false
       }).catch(res => {
-        this.$message.error('更新失败')
+        this.$message.error('업데이트 실패')
       })
     },
     /**
-     * 显示修改用户角色对话框
-     * @param index 用户下标
+     * 사용자 역할 수정 대화 상자 표시
+     * @param index 사용자 구독
      */
     showUpdateAccountRoleDialog(index) {
       this.dialogFormVisible = true
@@ -389,51 +389,51 @@ export default {
       this.tmpAccount.roleId = this.accountList[index].roleId
     },
     /**
-     * 更新用户角色
+     * 사용자 역할 업데이트
      */
     updateAccountRole() {
       updateAccountRole(this.tmpAccount).then(() => {
-        this.$message.success('更新成功')
+        this.$message.success('업데이트 성공')
         this.getAccountList()
         this.dialogFormVisible = false
       }).catch(res => {
-        this.$message.error('更新失败')
+        this.$message.error('업데이트 실패')
       })
     },
     /**
-     * 用户资料是否唯一
-     * @param account 用户
+     * 사용자 프로필이 고유한 지 여부
+     * @param account 사용자
      */
     isUniqueDetail(account) {
       for (let i = 0; i < this.accountList.length; i++) {
         if (this.accountList[i].name === account.name) {
-          this.$message.error('账户名已存在')
+          this.$message.error('계정 이름이 이미 존재합니다.')
           return false
         }
         if (this.accountList[i].email === account.email) {
-          this.$message.error('邮箱已存在')
+          this.$message.error('사서함이 이미 존재합니다.')
           return false
         }
       }
       return true
     },
     /**
-     * 删除用户
-     * @param index 用户下标
+     * 사용자 삭제
+     * @param index 사용자 구독
      */
     removeAccount(index) {
-      this.$confirm('删除该账户？', '警告', {
-        confirmButtonText: '是',
-        cancelButtonText: '否',
+      this.$confirm('계정을 삭제하시겠습니까?', '경고', {
+        confirmButtonText: '예',
+        cancelButtonText: '아니오',
         type: 'warning'
       }).then(() => {
         const id = this.accountList[index].id
         remove(id).then(() => {
-          this.$message.success('删除成功')
+          this.$message.success('성공적으로 삭제됨')
           this.getAccountList()
         })
       }).catch(() => {
-        this.$message.info('已取消删除')
+        this.$message.info('삭제됨')
       })
     }
   }

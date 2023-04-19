@@ -39,17 +39,17 @@ const account = {
   },
 
   actions: {
-    // 登录
+    // 등록
     Login({ commit }, loginForm) {
       return new Promise((resolve, reject) => {
         login(loginForm).then(response => {
           if (response.code === 200) {
-            // cookie中保存token
+            // 쿠키에 토큰 저장
             setToken(response.data)
-            // vuex中保存token
+            // 뷰엑스에 토큰 저장
             commit('SET_TOKEN', response.data)
           }
-          // 传递给/login/index.vue : store.dispatch('Login').then(data)
+          // 전달/login/index.vue : store.dispatch('Login').then(data)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -57,11 +57,11 @@ const account = {
       })
     },
 
-    // 获取用户信息
+    // 사용자 정보 얻기
     Detail({ commit }) {
       return new Promise((resolve, reject) => {
         detail().then(response => {
-          // 储存用户信息
+          // 사용자 정보 저장
           commit('SET_ACCOUNT', response.data)
           resolve(response)
         }).catch(error => {
@@ -70,11 +70,11 @@ const account = {
       })
     },
 
-    // 登出
+    // 로그아웃
     Logout({ commit }) {
       return new Promise((resolve, reject) => {
         logout().then(() => {
-          // 清除token等相关角色信息
+          // 토큰 및 기타 관련 역할 정보 지우기
           commit('RESET_ACCOUNT')
           removeToken()
           resolve()
@@ -84,7 +84,7 @@ const account = {
       })
     },
 
-    // 前端 登出
+    // 프런트 엔드 로그아웃
     FedLogout({ commit }) {
       return new Promise(resolve => {
         commit('RESET_ACCOUNT')
