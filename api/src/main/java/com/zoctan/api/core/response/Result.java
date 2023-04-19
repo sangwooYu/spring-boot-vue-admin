@@ -8,15 +8,15 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Zoctan
  * @date 2018/07/15
  */
-@ApiModel(value = "响应结果")
+@ApiModel(value = "응답 결과")
 public class Result<T> {
-  @ApiModelProperty(value = "状态码")
+  @ApiModelProperty(value = "상태 코드")
   private Integer code;
 
-  @ApiModelProperty(value = "消息")
+  @ApiModelProperty(value = "뉴스")
   private String message;
 
-  @ApiModelProperty(value = "数据")
+  @ApiModelProperty(value = "데이터")
   private T data;
 
   @Override

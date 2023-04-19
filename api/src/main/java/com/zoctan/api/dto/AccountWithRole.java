@@ -13,9 +13,9 @@ import javax.persistence.Transient;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class AccountWithRole extends Account {
-  /** 用户的角色Id */
+  /** 사용자의 역할 ID */
   @Transient private Long roleId;
 
-  /** 用户的角色名 */
+  /** 사용자의 역할 이름 */
   @Transient private String roleName;
 }

@@ -14,7 +14,7 @@ import java.security.*;
 import java.security.spec.InvalidParameterSpecException;
 
 /**
- * AES加解密工具
+ * AES 암호화 및 복호화 도구
  *
  * @author Zoctan
  * @date 2018/11/29
@@ -26,12 +26,12 @@ public class AesUtils {
   }
 
   /**
-   * AES解密
+   * AES 복호화
    *
-   * @param data 密文，被加密的数据
-   * @param key 秘钥
-   * @param iv 偏移量
-   * @param encodingFormat 解密后的结果需要进行的编码
+   * @param data 암호 텍스트, 암호화된 데이터
+   * @param key 비밀 키
+   * @param iv 오프셋
+   * @param encodingFormat 복호화된 결과에 필요한 인코딩
    */
   public static String decrypt(
       final String data, final String key, final String iv, final Charset encodingFormat) {

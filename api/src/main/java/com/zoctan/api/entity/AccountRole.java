@@ -13,12 +13,12 @@ import javax.persistence.Table;
 @Data
 @Table(name = "account_role")
 public class AccountRole {
-  /** 用户Id */
+  /** 사용자 ID */
   @Id
   @Column(name = "account_id")
   private Long accountId;
 
-  /** 角色Id */
+  /** 캐릭터 ID */
   @Column(name = "role_id")
   private Long roleId;
 }

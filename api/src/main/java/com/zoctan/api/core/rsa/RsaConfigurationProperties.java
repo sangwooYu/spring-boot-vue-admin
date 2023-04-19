@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * RSA 配置
+ * RSA 구성
  *
  * @author Zoctan
  * @date 2018/07/20
@@ -14,15 +14,15 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "rsa")
 public class RsaConfigurationProperties {
-  /** 私钥位置 */
+  /** 개인 키 위치 */
   private String privateKeyPath;
-  /** 公钥位置 */
+  /** 공개 키 위치 */
   private String publicKeyPath;
-  /** 使用文件还是直接使用字符串 */
+  /** 파일 또는 문자열만 사용 */
   private boolean useFile;
-  /** 私钥 */
+  /** 개인 키 */
   private String privateKey;
-  /** 公钥 */
+  /** 공개 키 */
   private String publicKey;
 
   private String publicKeyHead = "-----BEGIN PUBLIC KEY-----";

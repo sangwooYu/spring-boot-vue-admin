@@ -15,14 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Spring MVC 配置
+ * Spring MVC 구성
  *
  * @author Zoctan
  * @date 2018/05/27
  */
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport {
-  /** 使用阿里 FastJson 作为 JSON MessageConverter */
+  /** Ali FastJson을 JSON MessageConverter로 사용 * */
   @Override
   public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
     final FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
@@ -40,18 +40,18 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
           }
         });
     config.setSerializerFeatures(
-        // 保留空的字段
+        // 빈 필드 유지
         // SerializerFeature.WriteMapNullValue,
         // Number null -> 0
         SerializerFeature.WriteNullNumberAsZero,
-        // 美化输出
+        // 미화 출력
         SerializerFeature.PrettyFormat);
     converter.setFastJsonConfig(config);
     converter.setDefaultCharset(StandardCharsets.UTF_8);
     converters.add(converter);
   }
 
-  /** 视图控制器 */
+  /** 뷰 컨트롤러 */
   @Override
   public void addViewControllers(final ViewControllerRegistry registry) {
     // solved swagger2
@@ -63,7 +63,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     registry.addRedirectViewController("/swagger-resources", "/swagger-resources");
   }
 
-  /** 资源控制器 */
+  /** 리소스 컨트롤러 */
   @Override
   public void addResourceHandlers(final ResourceHandlerRegistry registry) {
     // solved swagger2

@@ -14,29 +14,29 @@ import java.sql.Timestamp;
  */
 @Data
 public class AccountDto {
-  /** 用户Id */
+  /** 사용자 아이디 */
   private Long id;
 
-  /** 邮箱 */
-  @NotEmpty(message = "邮箱不能为空")
+  /** 사서함 */
+  @NotEmpty(message = "사서함을 비울 수 없습니다.")
   @Email
   private String email;
 
-  /** 用户名 */
-  @NotEmpty(message = "用户名不能为空")
-  @Size(min = 3, message = "用户名长度不能小于3")
+  /** 사용자 이름 */
+  @NotEmpty(message = "사용자 이름은 비워 둘 수 없습니다.")
+  @Size(min = 3, message = "사용자 아이디 길이는 3보다 길어야 합니다.")
   private String name;
 
-  /** 密码 */
+  /** 비밀번호 */
   @JSONField(serialize = false)
-  @NotEmpty(message = "密码不能为空")
-  @Size(min = 6, message = "密码长度不能小于6")
+  @NotEmpty(message = "비밀번호는 비워 둘 수 없습니다.")
+  @Size(min = 6, message = "비밀번호 길이는 6보다 길어야 합니다.")
   private String password;
 
-  /** 注册时间 */
+  /** 등록 시간 */
   private Timestamp registerTime;
 
-  /** 上一次登录时间 */
+  /** 마지막 로그인 시간 */
   private Timestamp loginTime;
 
   private Long roleId;

@@ -13,16 +13,16 @@ import java.util.List;
  */
 public interface RoleMapper extends MyMapper<Role> {
   /**
-   * 获取所有角色以及对应的权限
+   * 모든 역할과 해당 권한 가져오기
    *
-   * @return 角色可控资源列表
+   * @return 캐릭터가 제어하는 리소스 목록
    */
   List<RoleWithResource> listRoles();
 
   /**
-   * 按角色Id更新修改时间
+   * 캐릭터 ID별 수정 시간 업데이트
    *
-   * @param id 角色Id
+   * @param id 캐릭터 ID
    */
   void updateTimeById(@Param("id") Long id);
 }

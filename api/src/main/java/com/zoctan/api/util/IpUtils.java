@@ -15,7 +15,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 
 /**
- * IP工具
+ * IP 도구
  *
  * @author Zoctan
  * @date 2018/05/27
@@ -32,7 +32,7 @@ public class IpUtils {
   }
 
   /**
-   * 获取请求中的 ip 地址
+   * 요청에서 IP 주소 가져오기
    *
    * @param request request
    * @return IP
@@ -55,20 +55,20 @@ public class IpUtils {
       }
       if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
         ip = request.getRemoteAddr();
-        // request.getRemoteAddr() 获取客户端的 IP 地址在大部分情况下都是有效的
-        // 但是在通过了 Apache，Squid 等反向代理软件就不能获取到客户端的真实 IP 地址
-        // 如果通过了多级反向代理的话 X-Forwarded-For 的值并不止一个
-        // 而是一串 IP 值，例如：192.168.1.110,192.168.1.120,192.168.1.130,192.168.1.100
-        // 其中第一个 192.168.1.110 才是用户真实的 IP
+        // request.getRemoteAddr() 대부분의 경우 클라이언트의 IP 주소를 얻는 것이 유효합니다.
+        // 그러나 Apache, Squid 등과 같은 역방향 프록시를 사용하면 클라이언트의 실제 IP 주소를 얻을 수 없습니다.
+        // 여러 레벨의 역방향 프록시가 전달되는 경우 둘 이상의 X-Forwarded-For 값이 있습니다.
+        // 대신 192.168.1.110,192.168.1.120,192.168.1.130,192.168.1.100과 같은 IP 값의 문자열입니다.
+        // 여기서 처음 192.168.1.110은 사용자의 실제 IP입니다.
         if (LOCALHOST_IPV4.equals(ip) || LOCALHOST_IPV6.equals(ip)) {
-          // 根据网卡取本机配置的 IP，而不是环回地址
+          // 루프백 주소가 아닌 NIC를 기반으로 로컬로 구성된 IP를 사용합니다.
           try {
             ip = InetAddress.getLocalHost().getHostAddress();
           } catch (final UnknownHostException ignored) {
           }
         }
       }
-      // 多个 IP 中取第一个
+      // 많은 IP 중 첫 번째
       final String ch = ",";
       if (!StringUtils.isEmpty(ip) && ip.contains(ch)) {
         ip = ip.substring(0, ip.indexOf(ch));
@@ -78,10 +78,10 @@ public class IpUtils {
   }
 
   /**
-   * 通过 IP 获取相关信息(需要联网，调用淘宝的IP库)
+   * IP로 관련 정보 얻기(인터넷 연결 필요, 타오바오의 IP 라이브러리 호출)
    *
    * @param ip ip
-   * @return IP相关信息
+   * @return IP 관련 정보
    */
   public static String getInfoByIP(final String ip) {
     try {

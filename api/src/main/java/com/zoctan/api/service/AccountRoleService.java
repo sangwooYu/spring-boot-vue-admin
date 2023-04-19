@@ -9,9 +9,9 @@ import com.zoctan.api.entity.AccountRole;
  */
 public interface AccountRoleService extends Service<AccountRole> {
   /**
-   * 更新用户角色
+   * 사용자 역할 업데이트
    *
-   * @param accountRole 用户角色
+   * @param accountRole 사용자 역할
    */
   void updateRoleIdByAccountId(AccountRole accountRole);
 }

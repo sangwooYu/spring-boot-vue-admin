@@ -5,21 +5,19 @@ import org.springframework.core.annotation.AliasFor;
 import java.lang.annotation.*;
 
 /**
- * 缓存过期注解
+ * 캐시 만료 노트
  *
- * @author Zoctan
- * @date 2018/07/11
  */
 @Inherited
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface CacheExpire {
-  /** 过期时间，默认 60s */
+  /** 만료 시간, 기본 60초 */
   @AliasFor("expire")
   long value() default 60L;
 
-  /** 过期时间，默认 60s */
+  /** 만료 시간, 기본 60초 */
   @AliasFor("value")
   long expire() default 60L;
 }

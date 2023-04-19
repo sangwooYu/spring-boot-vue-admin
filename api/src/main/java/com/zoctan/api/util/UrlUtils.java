@@ -4,7 +4,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Url工具
+ * URL 도구
  *
  * @author Zoctan
  * @date 2018/07/13
@@ -13,10 +13,10 @@ public class UrlUtils {
   private UrlUtils() {}
 
   /**
-   * 请求的相对路径 /account/list
+   * 요청 /계정/목록의 상대 경로
    *
    * @param request request
-   * @return 相对路径
+   * @return 반환 상대 경로
    */
   public static String getMappingUrl(final ServletRequest request) {
     return getMappingUrl((HttpServletRequest) request);

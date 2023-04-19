@@ -9,7 +9,7 @@ import java.util.List;
  * @date 2018/10/16
  */
 public class RoleWithPermission extends Role {
-  /** 角色对应的权限Id列表 */
+  /** 역할에 해당하는 권한 ID 목록 */
   private List<Integer> permissionIdList;
 
   public List<Integer> getPermissionIdList() {

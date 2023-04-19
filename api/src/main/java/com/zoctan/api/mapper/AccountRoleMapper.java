@@ -12,9 +12,9 @@ import org.apache.ibatis.annotations.Update;
 public interface AccountRoleMapper extends MyMapper<AccountRole> {
 
   /**
-   * 更新用户角色
+   * 사용자 역할 업데이트
    *
-   * @param accountRole 用户角色
+   * @param accountRole 사용자 역할
    */
   @Update(
       "UPDATE account_role SET role_id = #{accountRole.roleId} WHERE account_id = #{accountRole.accountId}")

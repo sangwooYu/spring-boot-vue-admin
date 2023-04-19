@@ -53,7 +53,7 @@ public class AccountController {
   public Result delete(@PathVariable final Long id, final Principal principal) {
     final Account dbAccount = this.accountService.getById(id);
     if (dbAccount == null) {
-      return ResultGenerator.genFailedResult("用户不存在");
+      return ResultGenerator.genFailedResult("사용자가 존재하지 않습니다.");
     }
     this.accountService.deleteById(id);
     return ResultGenerator.genOkResult();
@@ -67,20 +67,20 @@ public class AccountController {
     return ResultGenerator.genOkResult(isValidate);
   }
 
-  /** 更新其他账户的资料 */
+  /** 다른 계정의 세부 정보 업데이트 */
   @PreAuthorize("hasAuthority('account:update')")
   @PutMapping("/{id}")
   public Result updateOthers(
       @PathVariable final Long id, @RequestBody final Account account, final Principal principal) {
     final Account dbAccount = this.accountService.getById(id);
     if (dbAccount == null) {
-      return ResultGenerator.genFailedResult("用户不存在");
+      return ResultGenerator.genFailedResult("사용자가 존재하지 않습니다.");
     }
     this.accountService.update(account);
     return ResultGenerator.genOkResult();
   }
 
-  /** 更新自己的资料 */
+  /** 나만의 프로필 업데이트 */
   @PutMapping("/detail")
   public Result updateMe(@RequestBody final Account account) {
     this.accountService.update(account);
@@ -88,7 +88,7 @@ public class AccountController {
     return this.getToken(dbAccount.getName());
   }
 
-  /** 其他账户的资料 */
+  /** 다른 계정에 대한 정보 */
   @PreAuthorize("hasAuthority('account:detail')")
   @GetMapping("/{id}")
   public Result detail(@PathVariable final Long id) {
@@ -96,7 +96,7 @@ public class AccountController {
     return ResultGenerator.genOkResult(dbAccount);
   }
 
-  /** 自己的资料 */
+  /** 자신의 정보 */
   @GetMapping("/detail")
   public Result detail(final Principal principal) {
     final Account dbAccount = this.accountService.findDetailByName(principal.getName());
@@ -128,31 +128,31 @@ public class AccountController {
     // {"name":"admin", "password":"admin123"}
     // {"email":"admin@qq.com", "password":"admin123"}
     if (account.getName() == null && account.getEmail() == null) {
-      return ResultGenerator.genFailedResult("用户名或邮箱为空");
+      return ResultGenerator.genFailedResult("사용자 이름 또는 이메일이 비어 있습니다.");
     }
     if (account.getPassword() == null) {
-      return ResultGenerator.genFailedResult("密码为空");
+      return ResultGenerator.genFailedResult("비밀번호가 비어 있습니다.");
     }
     // 用户名登录
     Account dbAccount = null;
     if (account.getName() != null) {
       dbAccount = this.accountService.getBy("name", account.getName());
       if (dbAccount == null) {
-        return ResultGenerator.genFailedResult("用户名错误");
+        return ResultGenerator.genFailedResult("사용자 이름 오류");
       }
     }
     // 邮箱登录
     if (account.getEmail() != null) {
       dbAccount = this.accountService.getBy("email", account.getEmail());
       if (dbAccount == null) {
-        return ResultGenerator.genFailedResult("邮箱错误");
+        return ResultGenerator.genFailedResult("사서함 오류");
       }
       account.setName(dbAccount.getName());
     }
     // 验证密码
     //noinspection ConstantConditions
     if (!this.accountService.verifyPassword(account.getPassword(), dbAccount.getPassword())) {
-      return ResultGenerator.genFailedResult("密码错误");
+      return ResultGenerator.genFailedResult("비밀번호 오류");
     }
     // 更新登录时间
     this.accountService.updateLoginTimeByName(account.getName());
@@ -165,7 +165,7 @@ public class AccountController {
     return ResultGenerator.genOkResult();
   }
 
-  /** 获得 token */
+  /** 액세스 token */
   private Result getToken(final String name) {
     final UserDetails accountDetails = this.userDetailsService.loadUserByUsername(name);
     final String token = this.jwtUtil.sign(name, accountDetails.getAuthorities(), true);

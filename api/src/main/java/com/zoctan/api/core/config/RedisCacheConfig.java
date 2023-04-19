@@ -21,7 +21,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import javax.annotation.Resource;
 
 /**
- * Redis缓存配置
+ * Redis 캐시 구성
  *
  * @author Zoctan
  * @date 2018/07/11
@@ -37,45 +37,44 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
   @Bean
   @Override
   public CacheManager cacheManager() {
-    // 初始化一个 RedisCacheWriter
+    // RedisCacheWriter 초기화하기
     final RedisCacheWriter redisCacheWriter =
         RedisCacheWriter.nonLockingRedisCacheWriter(this.redisConnectionFactory);
     final RedisCacheConfiguration defaultCacheConfig =
         RedisCacheConfiguration.defaultCacheConfig()
-            // 不缓存 null 值
+            // 널 값 캐싱 없음
             // .disableCachingNullValues()
-            // 使用注解时的序列化、反序列化对
+            // 어노테이션을 사용할 때 직렬화, 역직렬화
             .serializeKeysWith(MyRedisCacheManager.STRING_PAIR)
             .serializeValuesWith(MyRedisCacheManager.FASTJSON_PAIR);
-    // 初始化RedisCacheManager
+    // RedisCacheManager 초기화하기
     return new MyRedisCacheManager(redisCacheWriter, defaultCacheConfig);
   }
 
   /**
-   * 如果 @Cacheable、@CachePut、@CacheEvict 等注解没有配置 key，则使用这个自定义 key 生成器
+   * @Cacheable, @CachePut, @CacheEvict 등의 어노테이션에 키가 구성되지 않은 경우 이 사용자 지정 키 생성기가 사용됩니다.
+   * <p>캐시 키를 사용자 지정할 때 키의 고유성을 보장하기 어려움
    *
-   * <p>自定义缓存的 key 时，难以保证 key 的唯一性
-   *
-   * <p>此时最好指定方法名，比如：@Cacheable(value="", key="{#root.methodName, #id}")
+   * <p>이 경우 메서드 이름을 지정하는 것이 좋습니다(예: @Cacheable(value="", key="{#root.methodName, #id}").
    */
   @Bean
   @Override
   public KeyGenerator keyGenerator() {
-    // 比如 User 类 list(Integer page, Integer size) 方法
-    // 用户 A 请求：list(1, 2)
-    // redis 缓存的 key：User.list#1,2
+    // 예를 들어, User 클래스 list(Integer 페이지, Integer 크기) 메서드는 다음과 같습니다.
+    // 사용자 A 요청: list(1, 2)
+    // redis 캐시 키: User.list#1,2
     return (target, method, params) -> {
       final String dot = ".";
       final StringBuilder sb = new StringBuilder(32);
-      // 类名
+      // 클래스 이름
       sb.append(target.getClass().getSimpleName());
       sb.append(dot);
-      // 方法名
+      // 메서드 이름
       sb.append(method.getName());
-      // 如果存在参数
+      // 매개 변수가 있는 경우
       if (0 < params.length) {
         sb.append("#");
-        // 带上参数
+        // 매개 변수 사용
         String comma = "";
         for (final Object param : params) {
           sb.append(comma);
@@ -91,7 +90,7 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
     };
   }
 
-  /** 错误处理，主要是打印日志 */
+  /** 오류 처리, 주로 로그 인쇄 */
   @Bean
   @Override
   public CacheErrorHandler errorHandler() {

@@ -12,17 +12,17 @@ import java.util.List;
  */
 public interface PermissionService extends Service<Permission> {
   /**
-   * 找到所有权限可控资源
+   * 관리 중인 모든 리소스 찾기
    *
-   * @return 资源列表
+   * @return 리소스 목록
    */
   List<Resource> listResourceWithHandle();
 
   /**
-   * 找到角色权限可控资源
+   * 역할 권한 제어 리소스 찾기
    *
-   * @param roleId 角色id
-   * @return 资源列表
+   * @param roleId 캐릭터 ID
+   * @return 리소스 목록
    */
   List<Resource> listRoleWithResourceByRoleId(Long roleId);
 }

@@ -14,24 +14,24 @@ import java.util.List;
  */
 public interface PermissionMapper extends MyMapper<Permission> {
   /**
-   * 找到所有权限可控资源
+   * 관리 중인 모든 리소스 찾기
    *
-   * @return 资源列表
+   * @return 리소스 목록
    */
   List<Resource> listResourceWithHandle();
 
   /**
-   * 找到所有权限可控资源
+   * 관리 중인 모든 리소스 찾기
    *
-   * @param roleId 角色id
-   * @return 资源列表
+   * @param roleId 캐릭터 ID
+   * @return 리소스 목록
    */
   List<Resource> listRoleWithResourceByRoleId(@Param("roleId") Long roleId);
 
   /**
-   * 获取所有权限代码
+   * 모든 권한 코드 가져오기
    *
-   * @return 代码列表
+   * @return 코드 목록
    */
   @Select("SELECT p.code FROM `permission` p")
   List<String> listAllCode();

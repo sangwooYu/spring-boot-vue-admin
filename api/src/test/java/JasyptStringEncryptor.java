@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 
 /**
- * jasypt 用于加密配置文件 https://github.com/ulisesbocchio/jasypt-spring-boot
+ * 구성 파일 암호화를 위한 jasypt https://github.com/ulisesbocchio/jasypt-spring-boot
  *
  * @author Zoctan
  * @date 2018/05/27

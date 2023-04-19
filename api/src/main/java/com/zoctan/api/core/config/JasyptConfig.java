@@ -12,7 +12,7 @@ import org.springframework.util.Base64Utils;
 import javax.annotation.Resource;
 
 /**
- * Jasypt 配置
+ * Jasypt 구성
  *
  * @author Zoctan
  * @date 2018/07/21
@@ -26,16 +26,16 @@ public class JasyptConfig {
 
   @Bean
   public StringEncryptor myStringEncryptor() throws Exception {
-    // Base64 + RSA 加密的密码
+    // Base64 + RSA 암호화 비밀번호
     final byte[] passwordEncryptedByRSA =
         Base64Utils.decodeFromString(this.passwordEncryptedByBase64AndRSA);
     final String password = new String(this.rsaUtils.decrypt(passwordEncryptedByRSA));
-    // 配置
+    // 구성
     final SimpleStringPBEConfig config =
         new SimpleStringPBEConfig() {
           {
             this.setPassword(password);
-            // 加密算法
+            // 암호화 알고리즘
             this.setAlgorithm("PBEWithMD5AndDES");
             this.setKeyObtentionIterations("1000");
             this.setPoolSize("1");

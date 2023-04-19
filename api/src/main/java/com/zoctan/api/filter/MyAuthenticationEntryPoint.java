@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 认证入口点 因为 RESTFul 没有登录界面所以只显示未登录提示
+ * 인증 진입점 RESTFul에는 로그인 화면이 없으므로 로그인하지 않았다는 프롬프트만 표시됩니다.
  *
  * @author Zoctan
  * @date 2018/05/27

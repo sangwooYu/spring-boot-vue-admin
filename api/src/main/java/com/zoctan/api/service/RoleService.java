@@ -14,23 +14,23 @@ import java.util.List;
 public interface RoleService extends Service<Role> {
 
   /**
-   * 新建角色
+   * 새 캐릭터 만들기
    *
-   * @param roleWithPermission 带权限列表的角色
+   * @param roleWithPermission 권한 목록이 있는 역할
    */
   void save(RoleWithPermission roleWithPermission);
 
   /**
-   * 更新角色
+   * 역할 업데이트
    *
-   * @param roleWithPermission 带权限列表的角色
+   * @param roleWithPermission 권한 목록이 있는 역할
    */
   void update(RoleWithPermission roleWithPermission);
 
   /**
-   * 获取所有角色以及对应的权限
+   * 모든 역할과 해당 권한 가져오기
    *
-   * @return 角色可控资源列表
+   * @return 캐릭터가 제어하는 리소스 목록
    */
   List<RoleWithResource> listRoleWithPermission();
 }

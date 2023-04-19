@@ -29,8 +29,8 @@ public class RoleServiceImpl extends AbstractService<Role> implements RoleServic
 
   @Override
   public List<RoleWithResource> listRoleWithPermission() {
-    // 由于mybatis在嵌套查询时和pagehelper有冲突
-    // 暂时用for循环代替
+    // 쿼리 중첩 시 mybatis와 페이지 헬퍼 간의 충돌로 인해
+    // 일시적으로 for 루프로 대체
     final List<RoleWithResource> roles = this.roleMapper.listRoles();
     roles.forEach(
         role -> {
@@ -49,7 +49,7 @@ public class RoleServiceImpl extends AbstractService<Role> implements RoleServic
 
   @Override
   public void update(final RoleWithPermission role) {
-    // 删掉所有权限，再添加回去
+    // 모든 권한을 삭제하고 다시 추가하기
     final Condition condition = new Condition(RolePermission.class);
     condition.createCriteria().andCondition("role_id = ", role.getId());
     this.rolePermissionMapper.deleteByCondition(condition);

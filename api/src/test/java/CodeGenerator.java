@@ -14,35 +14,35 @@ import java.util.*;
 import static com.zoctan.api.core.constant.ProjectConstant.*;
 
 /**
- * 代码生成器 根据数据表名称生成对应的 Entity、Mapper、Service、Controller 简化开发
+ * 코드 생성기 코드 생성기는 다음을 기반으로 해당 데이터 테이블 이름을 생성합니다. Entity、Mapper、Service、Controller 개발 간소화
  *
  * @author Zoctan
  * @date 2018/05/27
  */
 class CodeGenerator {
-  // JDBC配置，请修改为你项目的实际配置
+  // JDBC 구성은 프로젝트의 실제 구성으로 변경하십시오.
   private static final String JDBC_URL =
       "jdbc:mysql://localhost:3306/admin_test"
           + "?useUnicode=true&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=UTC";
   private static final String JDBC_USERNAME = "root";
   private static final String JDBC_PASSWORD = "root";
   private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-  // 项目在硬盘上的基础路径
+  // 하드 디스크에 있는 프로젝트의 기본 경로
   private static final String PROJECT_PATH = System.getProperty("user.dir");
-  // 模板位置
+  // 템플릿 위치
   private static final String TEMPLATE_FILE_PATH =
       CodeGenerator.PROJECT_PATH + "/src/test/resources/generator/template";
-  // java文件路径
+  // 자바 파일 경로
   private static final String JAVA_PATH = "/src/main/java";
-  // 资源文件路径
+  // 리소스 파일 경로
   private static final String RESOURCES_PATH = "/src/main/resources";
-  // 生成的Service存放路径
+  // 생성된 서비스 경로
   private static final String PACKAGE_PATH_SERVICE =
       CodeGenerator.packageConvertPath(SERVICE_PACKAGE);
-  // 生成的Service实现存放路径
+  // 생성된 서비스 구현 경로
   private static final String PACKAGE_PATH_SERVICE_IMPL =
       CodeGenerator.packageConvertPath(SERVICE_IMPL_PACKAGE);
-  // 生成的Controller存放路径
+  // 생성된 컨트롤러의 경로
   private static final String PACKAGE_PATH_CONTROLLER =
       CodeGenerator.packageConvertPath(CONTROLLER_PACKAGE);
 
@@ -54,19 +54,19 @@ class CodeGenerator {
 
   public static void main(final String[] args) {
     final Scanner scanner = new Scanner(System.in);
-    System.out.print("可能已存在相关文件，请尽可能确保无误。y/n:");
+    System.out.print("관련 문서가 이미 존재할 수 있으므로 가능한 한 오류가 없는지 확인하세요. y 또는 n 을 입력해주세요");
     if (!scanner.next().equals("y")) {
       return;
     }
-    CodeGenerator.genCode("report", "wechat");
-    // genCodeByCustomModelName("输入表名","输入自定义Model名称");
+//    CodeGenerator.genCode("report", "wechat");
+//    // genCodeByCustomModelName("输入表名","输入自定义Model名称");
   }
 
   /**
-   * 通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。 如输入表名称 "t_user_detail" 将生成
+   * 코드는 데이터 테이블 이름에서 생성되며, 모델 이름은 데이터 테이블 이름을 파싱하여 얻고, 밑줄은 큰 고비 형식으로 구문 분석하여 얻습니다. 예를 들어, 테이블 이름 "t_user_detail"을 입력하면 다음과 같은 코드가 생성됩니다.
    * TUserDetail、TUserDetailMapper、TUserDetailService ...
    *
-   * @param tableNames 数据表名称...
+   * @param tableNames 데이터 시트 이름...
    */
   private static void genCode(final String... tableNames) {
     for (final String tableName : tableNames) {
@@ -75,11 +75,11 @@ class CodeGenerator {
   }
 
   /**
-   * 通过数据表名称，和自定义的 Model 名称生成代码 如输入表名称 "t_user_detail" 和自定义的 Model 名称 "sysUser" 将生成
+   * 테이블 이름 및 사용자 지정 모델 이름으로 코드를 생성합니다. 예: 테이블 이름 "t_user_detail"을 입력하고 사용자 지정 모델 이름 "sysUser"를 입력하면 다음과 같은 코드가 생성됩니다.
    * sysUser、UserMapper、UserService ...
    *
-   * @param tableName 数据表名称
-   * @param modelName 自定义的 Model 名称
+   * @param tableName 데이터 시트 이름
+   * @param modelName 사용자 지정 모델 이름
    */
   private static void genCodeByCustomModelName(final String tableName, final String modelName) {
     CodeGenerator.genModelAndMapper(tableName, modelName);
@@ -149,18 +149,18 @@ class CodeGenerator {
       generator = new MyBatisGenerator(config, callback, warnings);
       generator.generate(null);
     } catch (final Exception e) {
-      throw new RuntimeException("生成 Model 和 Mapper 失败", e);
+      throw new RuntimeException("모델 및 매퍼 생성 실패", e);
     }
 
     if (generator.getGeneratedJavaFiles().isEmpty() || generator.getGeneratedXmlFiles().isEmpty()) {
-      throw new RuntimeException("生成 Model 和 Mapper 失败：" + warnings);
+      throw new RuntimeException("모델 및 매퍼를 생성하지 못했습니다:" + warnings);
     }
     if (StringUtils.isEmpty(modelName)) {
       modelName = CodeGenerator.tableNameConvertUpperCamel(tableName);
     }
-    System.out.println(modelName + ".java 生成成功");
-    System.out.println(modelName + "MyMapper.java 生成成功");
-    System.out.println(modelName + "MyMapper.xml 生成成功");
+    System.out.println(modelName + ".java가 성공적으로 생성되었습니다.");
+    System.out.println(modelName + "MyMapper.java가 성공적으로 생성되었습니다.");
+    System.out.println(modelName + "MyMapper.xml이 성공적으로 생성되었습니다.");
   }
 
   private static void genService(final String tableName, final String modelName) {
@@ -186,7 +186,7 @@ class CodeGenerator {
                   + modelNameUpperCamel
                   + "Service.java");
       cfg.getTemplate("service.ftl").process(data, new FileWriter(file));
-      System.out.println(modelNameUpperCamel + "Service.java 生成成功");
+      System.out.println(modelNameUpperCamel + "Service.java가 성공적으로 생성되었습니다.");
 
       final File file1 =
           CodeGenerator.createFileDir(
@@ -196,9 +196,9 @@ class CodeGenerator {
                   + modelNameUpperCamel
                   + "ServiceImpl.java");
       cfg.getTemplate("service-impl.ftl").process(data, new FileWriter(file1));
-      System.out.println(modelNameUpperCamel + "ServiceImpl.java 生成成功");
+      System.out.println(modelNameUpperCamel + "ServiceImpl.java가 성공적으로 생성되었습니다.");
     } catch (final Exception e) {
-      throw new RuntimeException("生成Service失败", e);
+      throw new RuntimeException("서비스 생성에 실패했습니다.", e);
     }
   }
 
@@ -207,7 +207,7 @@ class CodeGenerator {
     if (!file.getParentFile().exists()) {
       final boolean createSuccess = file.getParentFile().mkdirs();
       if (!createSuccess) {
-        throw new RuntimeException("文件夹创建失败");
+        throw new RuntimeException("폴더 만들기에 실패했습니다.");
       }
     }
     return file;
@@ -245,9 +245,9 @@ class CodeGenerator {
       } else {
         cfg.getTemplate("controller.ftl").process(data, new FileWriter(file));
       }
-      System.out.println(modelNameUpperCamel + "Controller.java 生成成功");
+      System.out.println(modelNameUpperCamel + "Controller.java가 성공적으로 생성되었습니다.");
     } catch (final Exception e) {
-      throw new RuntimeException("生成Controller失败", e);
+      throw new RuntimeException("컨트롤러 생성에 실패했습니다.", e);
     }
   }
 
@@ -269,7 +269,7 @@ class CodeGenerator {
   }
 
   private static String tableNameConvertMappingPath(String tableName) {
-    tableName = tableName.toLowerCase(); // 兼容使用大写的表名
+    tableName = tableName.toLowerCase(); // 대문자 테이블 이름과 호환
     return "/" + (tableName.contains("_") ? tableName.replaceAll("_", "/") : tableName);
   }
 

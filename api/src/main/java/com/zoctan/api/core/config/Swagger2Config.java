@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import static com.zoctan.api.core.constant.ProjectConstant.CONTROLLER_PACKAGE;
 
 /**
- * Swagger2 在线API文档 http://springfox.github.io/springfox/docs/current/#getting-started
+ * Swagger2  온라인 API 문서 http://springfox.github.io/springfox/docs/current/#getting-started
  *
  * @author Zoctan
  * @date 2018/05/27
@@ -28,7 +28,7 @@ public class Swagger2Config {
     return new Docket(DocumentationType.SWAGGER_2)
         .apiInfo(this.buildApiInfo())
         .select()
-        // 扫描 controller 包
+        // 스캔 컨트롤러 패키지
         .apis(RequestHandlerSelectors.basePackage(CONTROLLER_PACKAGE))
         .paths(PathSelectors.any())
         .build();

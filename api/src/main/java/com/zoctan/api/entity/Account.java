@@ -13,23 +13,23 @@ import java.sql.Timestamp;
  */
 @Data
 public class Account {
-  /** 用户Id */
+  /** 사용자 ID */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  /** 邮箱 */
+  /** 사서함 */
   private String email;
 
-  /** 用户名 */
+  /** 사용자 이름 */
   private String name;
 
-  /** 密码 */
+  /** 비밀번호 */
   private String password;
 
-  /** 注册时间 */
+  /** 등록 시간 */
   private Timestamp registerTime;
 
-  /** 上一次登录时间 */
+  /** 마지막 로그인 시간 */
   private Timestamp loginTime;
 }

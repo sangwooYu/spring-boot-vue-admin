@@ -6,7 +6,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 上下文工具
+ * 상황에 맞는 도구
  *
  * @author Zoctan
  * @date 2018/07/20
@@ -15,7 +15,7 @@ public class ContextUtils {
   private ContextUtils() {}
 
   /**
-   * 获取 request
+   * 요청 받기
    *
    * @return request
    */

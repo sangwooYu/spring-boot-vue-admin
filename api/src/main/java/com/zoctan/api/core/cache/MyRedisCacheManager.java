@@ -25,8 +25,8 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 /**
- * Redis 容易出现缓存问题（超时、Redis 宕机等），当使用 spring cache 的注释 Cacheable、Cacheput 等处理缓存问题时， 我们无法使用 try catch
- * 处理出现的异常，所以最后导致结果是整个服务报错无法正常工作。 通过自定义 MyRedisCacheManager 并继承 RedisCacheManager 来处理异常可以解决这个问题
+ * Redis는 캐싱 문제(시간 초과, Redis 다운타임 등)가 발생하기 쉬우며, 캐싱 문제를 처리하기 위해 스프링 캐시 어노테이션인 Cacheable, Cacheput 등을 사용할 때는 try catch를 사용할 수 없습니다.
+ * 예외가 처리되므로 최종적으로 전체 서비스가 오류를 보고하고 제대로 작동하지 않습니다. 이 문제는 MyRedisCacheManager를 사용자 정의하고 예외를 처리하도록 RedisCacheManager에서 상속하여 해결할 수 있습니다.
  *
  * <p>http://www.spring4all.com/article/937
  *
@@ -41,7 +41,7 @@ public class MyRedisCacheManager extends RedisCacheManager
   /**
    * value serializer
    *
-   * <p>使用 FastJsonRedisSerializer 会报错：java.lang.ClassCastException FastJsonRedisSerializer<Object>
+   * <p> FastJsonRedisSerializer 사용: java.lang.ClassCastException FastJsonRedisSerializer<Object>
    * fastSerializer = new FastJsonRedisSerializer<>(Object.class);
    */
   public static final GenericFastJsonRedisSerializer FASTJSON_SERIALIZER =

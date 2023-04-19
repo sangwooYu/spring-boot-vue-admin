@@ -13,22 +13,22 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
- * RSA 工具
+ * RSA 도구
  *
- * <p>用openssl生成512位RSA：
+ * <p>openssl로 512비트 RSA 생성：
  *
- * <p>生成私钥： openssl genrsa -out key.pem 512
+ * <p>개인 키 생성: openssl genrsa -out key.pem 512
  *
- * <p>从私钥中导出公钥： openssl rsa -in key.pem -pubout -out public-key.pem
+ * <p>개인 키에서 공개 키로: openssl rsa -in key.pem -pubout -out public-key.pem
  *
- * <p>公钥加密： openssl rsautl -encrypt -in xx.file -inkey public-key.pem -pubin -out xx.en
+ * <p>공개 키 암호화: openssl rsautl -encrypt -in xx.file -inkey public-key.pem -pubin -out xx.en
  *
- * <p>私钥解密： openssl rsautl -decrypt -in xx.en -inkey key.pem -out xx.de
+ * <p>개인 키 복호화： openssl rsautl -decrypt -in xx.en -inkey key.pem -out xx.de
  *
- * <p>pkcs8编码（Java）： openssl pkcs8 -topk8 -inform PEM -in key.pem -outform PEM -out private-key.pem
+ * <p>pkcs8코딩（Java）： openssl pkcs8 -topk8 -inform PEM -in key.pem -outform PEM -out private-key.pem
  * -nocrypt
  *
- * <p>最后将公私玥放在/resources/rsa/：private-key.pem public-key.pem
+ * <p>마지막으로 공개 및 비공개 유에의/resources/rsa/：private-key.pem public-key.pem
  *
  * @author Zoctan
  * @date 2018/07/20
@@ -48,10 +48,10 @@ public class RsaUtils {
   }
 
   /**
-   * 生成密钥对
+   * 키 쌍 생성
    *
-   * @param keyLength 密钥长度(最少512位)
-   * @return 密钥对 公钥 keyPair.getPublic() 私钥 keyPair.getPrivate()
+   * @param keyLength 키 길이(최소 512비트)
+   * @return 키 쌍 공개 키 keyPair.getPublic() 비공개 키 keyPair.getPrivate()
    * @throws Exception e
    */
   public KeyPair genKeyPair(final int keyLength) throws Exception {
@@ -61,11 +61,11 @@ public class RsaUtils {
   }
 
   /**
-   * 公钥加密
+   * 공개 키 암호화
    *
-   * @param content 待加密数据
-   * @param publicKey 公钥
-   * @return 加密内容
+   * @param content 암호화할 데이터
+   * @param publicKey 공개 키
+   * @return 암호화된 콘텐츠
    * @throws Exception e
    */
   public byte[] encrypt(final byte[] content, final PublicKey publicKey) throws Exception {
@@ -75,10 +75,10 @@ public class RsaUtils {
   }
 
   /**
-   * 公钥加密
+   * 공개 키 암호화
    *
-   * @param content 待加密数据
-   * @return 加密内容
+   * @param content 암호화할 데이터
+   * @return 암호화된 콘텐츠
    * @throws Exception e
    */
   public byte[] encrypt(final byte[] content) throws Exception {
@@ -86,11 +86,11 @@ public class RsaUtils {
   }
 
   /**
-   * 私钥解密
+   * 개인 키 암호 해독
    *
-   * @param content 加密数据
-   * @param privateKey 私钥
-   * @return 解密内容
+   * @param content 암호화된 데이터
+   * @param privateKey 개인 키
+   * @return 기밀 해제된 콘텐츠
    * @throws Exception e
    */
   public byte[] decrypt(final byte[] content, final PrivateKey privateKey) throws Exception {
@@ -100,10 +100,10 @@ public class RsaUtils {
   }
 
   /**
-   * 私钥解密
+   * 개인 키 암호 해독
    *
-   * @param content 加密数据
-   * @return 解密内容
+   * @param content 암호화된 데이터
+   * @return 기밀 해제된 콘텐츠
    * @throws Exception e
    */
   public byte[] decrypt(final byte[] content) throws Exception {
@@ -111,10 +111,10 @@ public class RsaUtils {
   }
 
   /**
-   * 加载pem格式的公钥
+   * 공개 키를 pem 형식으로 로드합니다.
    *
-   * @param decoded 二进制公钥
-   * @return 公钥
+   * @param decoded 바이너리 공개 키
+   * @return 공개 키
    */
   public PublicKey loadPublicKey(final byte[] decoded) {
     try {
@@ -129,9 +129,9 @@ public class RsaUtils {
   }
 
   /**
-   * 加载配置文件中设置的公钥
+   * 구성 파일에 설정된 공개 키를 로드합니다.
    *
-   * @return 公钥
+   * @return 공개 키
    */
   public PublicKey loadPublicKey() {
     try {
@@ -153,10 +153,10 @@ public class RsaUtils {
   }
 
   /**
-   * 加载pem格式PKCS8编码的私钥
+   * pem 형식 PKCS8 인코딩된 개인 키 로드
    *
-   * @param decoded 二进制私钥
-   * @return 私钥
+   * @param decoded 바이너리 개인 키
+   * @return 개인 키
    */
   public PrivateKey loadPrivateKey(final byte[] decoded) {
     try {
@@ -171,9 +171,9 @@ public class RsaUtils {
   }
 
   /**
-   * 加载配置文件中设置的私钥
+   * 구성 파일에 설정된 개인 키를 로드합니다.
    *
-   * @return 私钥
+   * @return 개인 키
    */
   public PrivateKey loadPrivateKey() {
     try {
@@ -195,16 +195,16 @@ public class RsaUtils {
   }
 
   /**
-   * 加载文件后替换头和尾并解密
+   * 파일을 로드하고 헤더와 꼬리를 바꾸고 암호를 해독합니다.
    *
-   * @return 文件字节
+   * @return 파일 바이트
    */
   private byte[] replaceAndBase64Decode(
       final String filePath, final String headReplace, final String tailReplace) throws Exception {
     // 从 classpath:resources/ 中加载资源
     final ClassPathResource resource = new ClassPathResource(filePath);
     if (!resource.exists()) {
-      throw new Exception("公私钥文件找不到");
+      throw new Exception("공개 키 및 개인 키 파일을 찾을 수 없습니다.");
     }
     final byte[] keyBytes = new byte[(int) resource.getFile().length()];
     final FileInputStream in = new FileInputStream(resource.getFile());

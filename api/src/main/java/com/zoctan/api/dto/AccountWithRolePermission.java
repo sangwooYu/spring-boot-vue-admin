@@ -13,6 +13,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class AccountWithRolePermission extends AccountWithRole {
-  /** 用户的角色对应的权限code */
+  /** 사용자의 역할은 권한 코드에 해당합니다. */
   @Transient private List<String> permissionCodeList;
 }

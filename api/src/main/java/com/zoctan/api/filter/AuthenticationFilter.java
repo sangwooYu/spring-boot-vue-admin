@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 身份认证过滤器
+ * 인증 필터
  *
  * @author Zoctan
  * @date 2018/05/27
@@ -51,24 +51,24 @@ public class AuthenticationFilter implements Filter {
         request.getMethod(),
         UrlUtils.getMappingUrl(request));
 
-    // 设置允许多个域名请求
+    // 여러 도메인 요청을 허용하도록 설정
     String[] allowDomains = {"http://localhost:9999", "http://localhost:8080"};
     Set<String> allowOrigins = new HashSet<>(Arrays.asList(allowDomains));
     String origin = request.getHeader("Origin");
     if (allowOrigins.contains(origin)) {
-      // 设置允许跨域的配置
+      // 교차 도메인을 허용하도록 구성 설정
       response.setHeader("Access-Control-Allow-Origin", origin);
     }
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader(
         "Access-Control-Allow-Headers", "Content-Type, Content-Length, Authorization");
-    // 明确允许通过的方法，不建议使用 *
+    // 명시적으로 전달이 허용된 메서드, 권장되지 않음 *
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS");
     response.setHeader("Access-Control-Max-Age", "3600");
     response.setHeader("Access-Control-Expose-Headers", "*");
 
-    // 预请求后，直接返回
-    // 返回码必须为 200 否则视为请求失败
+    // 사전 요청 후 바로 반환
+    // 반환 코드는 200이어야 하며, 그렇지 않으면 요청이 실패한 것으로 간주됩니다.
     if (HttpMethod.OPTIONS.matches(request.getMethod())) {
       return;
     }
@@ -85,8 +85,8 @@ public class AuthenticationFilter implements Filter {
 
           authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-          // 向 security 上下文中注入已认证的账户
-          // 之后可以直接在控制器 controller 的入参获得 Principal 或 Authentication
+          // 인증된 계정을 보안 컨텍스트에 삽입하기
+          // 그런 다음 컨트롤러 컨트롤러의 항목에서 직접 주체 또는 인증을 받을 수 있습니다.
           SecurityContextHolder.getContext().setAuthentication(authentication);
           AuthenticationFilter.log.debug(
               "==> Account<{}> is authorized, set security context", name);

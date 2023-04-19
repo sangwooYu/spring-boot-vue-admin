@@ -12,10 +12,10 @@ import java.util.List;
  */
 public interface RolePermissionMapper extends MyMapper<RolePermission> {
   /**
-   * 保存角色以及对应的权限ID
+   * 역할과 해당 권한 ID를 저장합니다.
    *
-   * @param roleId 角色ID
-   * @param permissionIdList 权限ID列表
+   * @param roleId 캐릭터 ID
+   * @param permissionIdList 권한 ID 목록
    */
   void saveRolePermission(
       @Param("roleId") Long roleId, @Param("permissionIdList") List<Integer> permissionIdList);

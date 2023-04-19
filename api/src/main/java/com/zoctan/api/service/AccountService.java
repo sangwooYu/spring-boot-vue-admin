@@ -16,57 +16,57 @@ import java.util.Map;
  */
 public interface AccountService extends Service<Account> {
   /**
-   * 保存用户
+   * 사용자 저장
    *
-   * @param accountDto 用户
+   * @param accountDto 사용자
    */
   void save(AccountDto accountDto);
 
   /**
-   * 获取所有用户以及对应角色
+   * 모든 사용자와 해당 역할 가져오기
    *
-   * @return 用户列表
+   * @return 사용자 목록
    */
   List<AccountWithRole> listAllWithRole();
 
   /**
-   * 按条件查询用户
+   * 조건별 사용자 검색
    *
-   * @param params 参数
-   * @return 用户列表
+   * @param params 매개변수
+   * @return 사용자 목록
    */
   List<AccountWithRole> findWithRoleBy(final Map<String, Object> params);
 
   /**
-   * 按条件查询用户信息
+   * 조건별 사용자 정보 검색
    *
-   * @param column 列名
-   * @param params 参数
-   * @return 用户
+   * @param column 리스팅
+   * @param params 매개변수
+   * @return 사용자
    */
   AccountWithRolePermission findDetailBy(String column, Object params);
 
   /**
-   * 按用户名查询用户信息
+   * 사용자 이름으로 사용자 정보 검색
    *
-   * @param name 用户名
-   * @return 用户
-   * @throws UsernameNotFoundException 用户名找不到
+   * @param name 사용자 이름
+   * @return 사용자
+   * @throws UsernameNotFoundException 사용자 이름을 찾을 수 없습니다.
    */
   AccountWithRolePermission findDetailByName(String name) throws UsernameNotFoundException;
 
   /**
-   * 按用户名更新最后一次登录时间
+   * 사용자 이름으로 마지막 로그인 시간 업데이트
    *
-   * @param name 用户名
+   * @param name 사용자 이름
    */
   void updateLoginTimeByName(String name);
 
   /**
-   * 验证用户密码
+   * 사용자 비밀번호 확인
    *
-   * @param rawPassword 原密码
-   * @param encodedPassword 加密后的密码
+   * @param rawPassword 원본 비밀번호
+   * @param encodedPassword 암호화된 비밀번호
    * @return boolean
    */
   boolean verifyPassword(String rawPassword, String encodedPassword);

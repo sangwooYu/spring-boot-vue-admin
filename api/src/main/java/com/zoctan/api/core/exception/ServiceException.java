@@ -3,7 +3,7 @@ package com.zoctan.api.core.exception;
 import com.zoctan.api.core.response.ResultCode;
 
 /**
- * Service 异常
+ * 서비스 예외 사항
  *
  * @author Zoctan
  * @date 2018/05/27

@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * Json web token 工具 验证、生成 token
+ * Json 웹 토큰 도구 유효성 검사, 토큰 생성
  *
  * @author Zoctan
  * @date 2018/05/27
@@ -36,35 +36,35 @@ public class JwtUtil {
     return jws == null ? null : jws.getBody();
   }
 
-  /** 根据 token 得到账户名 */
+  /** 토큰에서 계정 이름 가져오기 */
   public String getName(final String token) {
     final Claims claims = this.getClaims(token);
     return claims == null ? null : claims.getSubject();
   }
 
   /**
-   * 签发 token
+   * 토큰 발행
    *
-   * @param name 账户名
-   * @param grantedAuthorities 账户权限信息[ADMIN, TEST, ...]
-   * @param isAdmin 是否为管理后台
+   * @param name 계정 이름
+   * @param grantedAuthorities 계정 권한 정보 [ADMIN, TEST, ...]
+   * @param isAdmin 관리 백오피스인가요?
    */
   public String sign(
       final String name,
       final Collection<? extends GrantedAuthority> grantedAuthorities,
       final boolean isAdmin) {
-    // 函数式创建 token，避免重复书写
+    // 중복 작성을 방지하는 기능적 토큰 생성
     final Supplier<String> createToken = () -> this.createToken(name, grantedAuthorities, isAdmin);
-    // 看看缓存有没有账户 token
+    // 캐시에 계정 토큰이 있는지 확인하기
     final String token = (String) this.redisUtils.getValue(name);
-    // 没有登录过
+    // 로그인하지 않음
     if (StringUtils.isBlank(token)) {
       return createToken.get();
     }
     final boolean isValidate = (boolean) this.redisUtils.getValue(token);
-    // token 仍有效
+    // 토큰이 여전히 유효합니다.
     if (isValidate) {
-      // 删除，重新签发
+      // 삭제, 재발급
       this.redisUtils.delete(name);
       this.redisUtils.delete(token);
       return createToken.get();
@@ -73,122 +73,122 @@ public class JwtUtil {
   }
 
   /**
-   * 清除账户在 Redis 中缓存的 token
+   * Redis에서 계정의 토큰 캐시 지우기
    *
-   * @param name 账户名
+   * @param name 계정 이름
    */
   public void invalidRedisToken(final String name) {
-    // 将 token 设置为无效
+    // 미래에 token 유효하지 않음으로 설정
     final String token = (String) this.redisUtils.getValue(name);
     Optional.ofNullable(token).ifPresent(_token -> this.redisUtils.setValue(_token, false));
   }
 
-  /** 从请求头或请求参数中获取 token */
+  /** 요청 헤더 또는 요청 매개변수에서 token */
   public String getTokenFromRequest(final HttpServletRequest httpRequest) {
     final String header = this.jwtProperties.getHeader();
     final String token = httpRequest.getHeader(header);
     return StringUtils.isNotBlank(token) ? token : httpRequest.getParameter(header);
   }
 
-  /** 返回账户认证 */
+  /** 계정 인증으로 돌아가기 */
   public UsernamePasswordAuthenticationToken getAuthentication(
       final String name, final String token) {
-    // 解析 token 的 payload
+    // 토큰의 페이로드 구문 분석하기
     final Claims claims = this.getClaims(token);
-    // 因为 JwtAuthenticationFilter 拦截器已经检查过 token 有效，所以可以忽略 get 空指针提示
+    // JwtAnthenticationFilter 인터셉터가 이미 토큰이 유효한지 확인했으므로, get null 포인터 힌트는 무시할 수 있습니다.
     assert claims != null;
     final String claimKeyAuth = this.jwtProperties.getClaimKeyAuth();
-    // 账户角色列表
+    // 계정 역할 목록
     final List<String> authList = Arrays.asList(claims.get(claimKeyAuth).toString().split(","));
-    // 将元素转换为 GrantedAuthority 接口集合
+    // 요소를 GrantedAuthority 인터페이스 컬렉션으로 변환하기
     final Collection<? extends GrantedAuthority> authorities =
         authList.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     final User user = new User(name, "", authorities);
     return new UsernamePasswordAuthenticationToken(user, null, authorities);
   }
 
-  /** 验证 token 是否正确 */
+  /** 토큰이 올바른지 확인 */
   public boolean validateToken(final String token) {
     boolean isValidate = true;
     final Object redisTokenValidate = this.redisUtils.getValue(token);
-    // 可能 redis 部署出现了问题
-    // 或者清空了缓存导致 token 键不存在
+    // redis 배포에 문제가 있을 수 있습니다.
+    // 또는 캐시가 지워져 토큰 키가 존재하지 않습니다.
     if (redisTokenValidate != null) {
       isValidate = (boolean) redisTokenValidate;
     }
-    // 能正确解析 token，并且 redis 中缓存的 token 也是有效的
+    // 토큰이 올바르게 구문 분석되었고 redis에 캐시된 토큰이 유효합니다.
     return this.parseToken(token) != null && isValidate;
   }
 
-  /** 生成 token */
+  /** 생성 token */
   private String createToken(
       final String name,
       final Collection<? extends GrantedAuthority> grantedAuthorities,
       final boolean isAdmin) {
-    // 获取账户的角色字符串，如 USER,ADMIN
+    // 계정의 역할 문자열을 가져옵니다(예: USER,ADMIN).
     final String authorities =
         grantedAuthorities.stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
     JwtUtil.log.debug("==> Account<{}> authorities: {}", name, authorities);
 
-    // 过期时间
+    // 만료 시간
     final Duration expireTime;
     if (isAdmin) {
       expireTime = this.jwtProperties.getAdminExpireTime();
     } else {
       expireTime = this.jwtProperties.getWechatExpireTime();
     }
-    // 当前时间 + 有效时长
+    // 현재 시간 + 유효 시간
     final Date expireDate = new Date(System.currentTimeMillis() + expireTime.toMillis());
-    // 创建 token，比如 "Bearer abc1234"
+    // 토큰 생성(예: "무기명 abc1234")
     final String token =
         this.jwtProperties.getTokenType()
             + " "
             + Jwts.builder()
-                // 设置账户名
+                // 계정 이름 설정
                 .setSubject(name)
-                // 添加权限属性
+                // 권한 속성 추가하기
                 .claim(this.jwtProperties.getClaimKeyAuth(), authorities)
-                // 设置失效时间
+                // 만료 시간 설정
                 .setExpiration(expireDate)
-                // 私钥加密生成签名
+                // 서명 생성을 위한 개인 키 암호화
                 .signWith(SignatureAlgorithm.RS256, this.rsaUtils.loadPrivateKey())
-                // 使用LZ77算法与哈夫曼编码结合的压缩算法进行压缩
+                // 허프만 코딩과 결합된 LZ77 알고리즘을 사용한 압축
                 .compressWith(CompressionCodecs.DEFLATE)
                 .compact();
-    // 保存账户 token
-    // 因为账户注销后 JWT 本身只要没过期就仍然有效，所以只能通过 redis 缓存来校验有无效
-    // 校验时只要 redis 中的 token 无效即可（JWT 本身可以校验有无过期，而 redis 过期即被删除了）
-    // true 有效
+    // 계정 토큰 저장
+    // JWT 자체는 계정이 만료되지 않은 한 로그아웃한 후에도 유효하므로 무효화를 확인할 수 있는 유일한 방법은 redis 캐시를 이용하는 것입니다.
+    // redis의 토큰은 유효하지 않은 한 확인할 수 있습니다(JWT 자체는 만료 여부를 확인할 수 있는 반면 redis는 만료되면 삭제됨).
+    // 참 유효
     this.redisUtils.setValue(token, true, expireTime);
-    // redis 过期时间和 JWT 的一致
+    // Redis 만료 시간 및 JWT 일관성
     this.redisUtils.setValue(name, token, expireTime);
     JwtUtil.log.debug("==> Redis set Account<{}> token: {}", name, token);
     return token;
   }
 
-  /** 解析 token */
+  /** 분석 token */
   private Jws<Claims> parseToken(final String token) {
     try {
       return Jwts.parser()
-          // 公钥解密
+          // 공개 키 복호화
           .setSigningKey(this.rsaUtils.loadPublicKey())
           .parseClaimsJws(token.replace(this.jwtProperties.getTokenType(), ""));
     } catch (final SignatureException e) {
-      // 签名异常
+      // 서명 예외
       JwtUtil.log.debug("Invalid JWT signature");
     } catch (final MalformedJwtException e) {
-      // 格式错误
+      // 서식 오류
       JwtUtil.log.debug("Invalid JWT token");
     } catch (final ExpiredJwtException e) {
-      // 过期
+      // 만료됨
       JwtUtil.log.debug("Expired JWT token");
     } catch (final UnsupportedJwtException e) {
-      // 不支持该JWT
+      // 이 JWT는 지원되지 않습니다.
       JwtUtil.log.debug("Unsupported JWT token");
     } catch (final IllegalArgumentException e) {
-      // 参数错误异常
+      // 매개변수 오류 예외
       JwtUtil.log.debug("JWT token compact of handler are invalid");
     }
     return null;

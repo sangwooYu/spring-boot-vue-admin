@@ -12,17 +12,17 @@ import javax.persistence.Id;
  */
 @Data
 public class Permission {
-  /** 权限Id */
+  /** 권한 ID */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  /** 权限对应的资源 */
+  /** 권한에 해당하는 리소스 */
   private String resource;
 
-  /** 权限的代码/通配符,对应代码中@hasAuthority(xx) */
+  /** 권한 코드/와일드카드(코드에서 @hasAuthority(xx)에 해당) */
   private String code;
 
-  /** 对应的资源操作 */
+  /** 해당 리소스 작업 */
   private String handle;
 }

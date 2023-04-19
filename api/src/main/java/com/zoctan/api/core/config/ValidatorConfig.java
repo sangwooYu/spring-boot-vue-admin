@@ -10,7 +10,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 /**
- * 参数校验
+ * 매개변수 확인
  * https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-constraint-violation-methods
  *
  * @author Zoctan
@@ -21,10 +21,10 @@ public class ValidatorConfig {
   @Bean
   public MethodValidationPostProcessor methodValidationPostProcessor() {
     final MethodValidationPostProcessor postProcessor = new MethodValidationPostProcessor();
-    // 设置 validator 模式为快速失败返回
+    // 빠른 실패 시 반환하도록 유효성 검사기 모드 설정
     postProcessor.setValidator(this.validatorFailFast());
     return postProcessor;
-    // 默认是普通模式，会返回所有的验证不通过信息集合
+    // 기본값은 모든 실패한 유효성 검사 메시지 모음을 반환하는 일반 모드입니다.
     // return new MethodValidationPostProcessor();
   }
 

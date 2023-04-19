@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * 请求装饰器，用于多次读取请求流
+ * 요청 스트림의 다중 읽기를 위한 요청 데코레이터
  *
  * @author Zoctan
  * @date 2018/07/13

@@ -4,7 +4,7 @@ import com.zoctan.api.core.exception.ServiceException;
 import com.zoctan.api.core.response.ResultCode;
 
 /**
- * 断言工具
+ * 어설션 도구
  *
  * @author Zoctan
  * @date 2018/11/29

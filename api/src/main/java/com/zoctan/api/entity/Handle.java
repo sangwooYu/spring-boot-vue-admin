@@ -10,9 +10,9 @@ import javax.persistence.Transient;
  */
 @Data
 public class Handle {
-  /** 对应权限id */
+  /** 해당 권한 ID */
   @Transient private Long id;
 
-  /** 操作名称 */
+  /** 작업 이름 */
   @Transient private String handle;
 }

@@ -13,12 +13,12 @@ import javax.persistence.Table;
 @Data
 @Table(name = "role_permission")
 public class RolePermission {
-  /** 角色Id */
+  /** 캐릭터 ID */
   @Id
   @Column(name = "role_id")
   private Long roleId;
 
-  /** 权限Id */
+  /** 권한 ID */
   @Column(name = "permission_id")
   private Long permissionId;
 }

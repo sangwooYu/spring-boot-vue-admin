@@ -15,6 +15,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class RoleWithResource extends Role {
-  /** 角色对应的权限 */
+  /** 권한에 해당하는 역할 */
   @Transient private List<Resource> resourceList;
 }

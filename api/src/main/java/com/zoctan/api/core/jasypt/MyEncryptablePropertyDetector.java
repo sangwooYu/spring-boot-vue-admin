@@ -5,16 +5,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
- * 自定义被加密值的发现器 默认：ENC(abc) 自定义：MyEnc({abc})
+ * 암호화된 값에 대한 사용자 지정 디스커버러 기본값: ENC(abc) 사용자 지정: MyEnc({abc})
  *
  * @author Zoctan
  * @date 2018/07/20
  */
 @Component
 public class MyEncryptablePropertyDetector implements EncryptablePropertyDetector {
-  /** 前缀 */
+  /** 접두사 */
   private static final String PREFIX = "MyEnc({";
-  /** 后缀 */
+  /** 접미사 */
   private static final String SUFFIX = "})";
 
   @Override

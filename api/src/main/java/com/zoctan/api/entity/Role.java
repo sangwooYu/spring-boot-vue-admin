@@ -15,20 +15,20 @@ import java.sql.Timestamp;
  */
 @Data
 public class Role {
-  /** 角色Id */
+  /** 캐릭터 ID */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  /** 角色名称 */
-  @NotEmpty(message = "角色名不能为空")
+  /** 캐릭터 이름 */
+  @NotEmpty(message = "캐릭터 이름은 비워둘 수 없습니다.")
   private String name;
 
-  /** 创建时间 */
+  /** 생성 시간 */
   @Column(name = "create_time")
   private Timestamp createTime;
 
-  /** 修改时间 */
+  /** 시간 수정 */
   @Column(name = "update_time")
   private Timestamp updateTime;
 }

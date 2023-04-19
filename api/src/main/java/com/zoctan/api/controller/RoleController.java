@@ -36,7 +36,7 @@ public class RoleController {
   public Result delete(@PathVariable final Long id, final Principal principal) {
     final Role dbRole = this.roleService.getById(id);
     if (dbRole == null) {
-      return ResultGenerator.genFailedResult("角色不存在");
+      return ResultGenerator.genFailedResult("역할이 존재하지 않음");
     }
     this.roleService.deleteById(id);
     return ResultGenerator.genOkResult();
@@ -47,7 +47,7 @@ public class RoleController {
   public Result update(@RequestBody final RoleWithPermission role, final Principal principal) {
     final Role dbRole = this.roleService.getById(role.getId());
     if (dbRole == null) {
-      return ResultGenerator.genFailedResult("角色不存在");
+      return ResultGenerator.genFailedResult("역할이 존재하지 않음");
     }
     this.roleService.update(role);
     return ResultGenerator.genOkResult();

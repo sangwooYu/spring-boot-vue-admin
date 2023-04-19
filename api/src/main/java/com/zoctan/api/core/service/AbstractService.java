@@ -15,16 +15,17 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 基于通用 MyBatis Mapper 插件的 Service 接口的实现
+ * 일반 마이바티스 매퍼 플러그인을 기반으로 한 서비스 인터페이스 구현
  *
  * @author Zoctan
  * @date 2018/05/27
  */
 public abstract class AbstractService<T> implements Service<T> {
-  /** 当前泛型的实体 Class */
+  /** 현재 일반 유형의 엔티티 Class */
   private final Class<T> entityClass;
 
-  @Autowired protected MyMapper<T> mapper;
+//  @Autowired protected MyMapper<T> mapper;
+  protected MyMapper<T> mapper;
 
   protected AbstractService() {
     final ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
@@ -66,7 +67,7 @@ public abstract class AbstractService<T> implements Service<T> {
   @Override
   public void assertByIds(final String ids) {
     final int count = this.countByIds(ids);
-    // id数和列表数不对应
+    // ID 수가 목록 수와 일치하지 않습니다.
     if (ids.split(",").length > count) {
       throw new ResourcesNotFoundException();
     }

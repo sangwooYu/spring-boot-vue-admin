@@ -7,7 +7,7 @@ import tk.mybatis.mapper.entity.Condition;
 import java.util.List;
 
 /**
- * Service 层基础接口
+ * Service 레이어 기본 인터페이스
  *
  * @author Zoctan
  * @date 2018/05/27
@@ -15,139 +15,139 @@ import java.util.List;
 public interface Service<T> {
 
   /**
-   * 确保实体存在
+   * 물리적 존재감 보장
    *
-   * @param id 实体id
-   * @throws ResourcesNotFoundException 不存在实体异常
+   * @param id 엔티티 ID
+   * @throws ResourcesNotFoundException 신체적 이상 없음
    */
   void assertById(Object id);
 
   /**
-   * 确保实体存在
+   * 물리적 존재감 보장
    *
-   * @param entity 实体
-   * @throws ResourcesNotFoundException 不存在实体异常
+   * @param entity 엔티티
+   * @throws ResourcesNotFoundException 신체적 이상 없음
    */
   void assertBy(T entity);
 
   /**
-   * 确保实体存在
+   * 물리적 존재감 보장
    *
    * @param ids ids
    */
   void assertByIds(String ids);
 
   /**
-   * 根据 ids 获取实体数
+   * ID를 기준으로 엔티티 수 가져오기
    *
    * @param ids ids
    */
   int countByIds(String ids);
 
   /**
-   * 根据条件获取实体数
+   * 조건에 따라 엔티티 수 가져오기
    *
-   * @param condition 条件
+   * @param condition 조건
    */
   int countByCondition(Condition condition);
 
   /**
-   * 持久化
+   * 내구성
    *
-   * @param entity 实体
+   * @param entity 엔티티
    */
   void save(T entity);
 
   /**
-   * 批量持久化
+   * 배치 지속성
    *
-   * @param entities 实体列表
+   * @param entities 엔티티 목록
    */
   void save(List<T> entities);
 
   /**
-   * 通过主鍵刪除
+   * 마스터 키로 삭제
    *
    * @param id id
    */
   void deleteById(Object id);
 
   /**
-   * 通过实体中某个成员变量名称（非数据表中 column 的名称）刪除
+   * 엔티티의 멤버 변수 이름으로 삭제(데이터 테이블의 열 이름이 아님)
    *
-   * @param fieldName 字段名
-   * @param value 字段值
-   * @throws TooManyResultsException 多条结果异常
+   * @param fieldName 필드 이름
+   * @param value 필드 값
+   * @throws TooManyResultsException 여러 결과 예외
    */
   void deleteBy(String fieldName, Object value) throws TooManyResultsException;
 
   /**
-   * 批量刪除 ids -> “1,2,3,4”
+   * 대량 삭제 ids -> “1,2,3,4”
    *
    * @param ids ids
    */
   void deleteByIds(String ids);
 
   /**
-   * 根据条件刪除
+   * 조건별 삭제
    *
-   * @param condition 条件
+   * @param condition 조건
    */
   void deleteByCondition(Condition condition);
 
   /**
-   * 按组件更新
+   * 구성 요소별 업데이트
    *
-   * @param entity 实体
+   * @param entity 엔티티
    */
   void update(T entity);
 
   /**
-   * 按条件更新
+   * 조건별 업데이트
    *
-   * @param entity 实体
-   * @param condition 条件
+   * @param entity 엔티티
+   * @param condition 조건
    */
   void updateByCondition(T entity, Condition condition);
 
   /**
-   * 通过 id 查找
+   * 아이디로 찾기
    *
    * @param id id
-   * @return 实体
+   * @return 엔티티
    */
   T getById(Object id);
 
   /**
-   * 通过实体中某个成员变量名称查找 value 需符合 unique 约束
+   * 엔티티의 멤버 변수 이름으로 값을 찾는 데는 다음과 같은 고유 제약 조건이 적용됩니다.
    *
-   * @param fieldName 字段名
-   * @param value 字段值
-   * @return 实体
-   * @throws TooManyResultsException 多条结果异常
+   * @param fieldName 필드 이름
+   * @param value 필드 값
+   * @return 엔티티
+   * @throws TooManyResultsException 여러 결과 예외
    */
   T getBy(String fieldName, Object value) throws TooManyResultsException;
 
   /**
-   * 通过多个 id 查找 ids -> “1,2,3,4”
+   * 여러 개의 아이디로 아이디 찾기 -> "1,2,3,4"
    *
    * @param ids ids
-   * @return 实体列表
+   * @return 엔티티 목록
    */
   List<T> listByIds(String ids);
 
   /**
-   * 按条件查找
+   * 조건으로 검색
    *
-   * @param condition 条件
-   * @return 实体列表
+   * @param condition 조건
+   * @return 엔티티 목록
    */
   List<T> listByCondition(Condition condition);
 
   /**
-   * 获取所有实体
+   * 모든 엔티티 가져오기
    *
-   * @return 实体列表
+   * @return 엔티티 목록
    */
   List<T> listAll();
 }

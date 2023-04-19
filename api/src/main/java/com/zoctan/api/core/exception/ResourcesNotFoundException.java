@@ -1,13 +1,13 @@
 package com.zoctan.api.core.exception;
 
 /**
- * 资源没找到异常（更新和删除都需先确认存在才操作）
+ * 리소스를 찾을 수 없음 예외(조치를 취하기 전에 업데이트 및 삭제를 모두 확인해야 함)
  *
  * @author Zoctan
  * @date 2018/07/20
  */
 public class ResourcesNotFoundException extends RuntimeException {
-  private static final String DEFAULT_MESSAGE = "资源不存在";
+  private static final String DEFAULT_MESSAGE = "리소스가 존재하지 않습니다.";
 
   public ResourcesNotFoundException() {
     super(DEFAULT_MESSAGE);

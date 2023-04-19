@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 import java.time.Duration;
 
 /**
- * Redis配置
+ * Redis 구성
  *
  * @author Zoctan
  * @date 2018/05/27
@@ -38,54 +38,54 @@ public class RedisConfig {
   @ConfigurationProperties(prefix = "spring.redis")
   public RedisConnectionFactory redisConnectionFactory(
       @Qualifier(value = "jedisPoolConfig") final JedisPoolConfig jedisPoolConfig) {
-    // 方法上的 @ConfigurationProperties 不生效
-    // 未知 bug，暂时这样手动设置
+    // 메서드의 @ConfigurationProperties는 적용되지 않습니다.
+    // 알 수 없는 버그, 현재로서는 다음과 같이 수동으로 설정합니다.
     // fixme
-    // 单机版 jedis
+    // 독립형 jedis
     final RedisStandaloneConfiguration redisStandaloneConfiguration =
         new RedisStandaloneConfiguration(
             this.redisProperties.getHost(), this.redisProperties.getPort());
     redisStandaloneConfiguration.setDatabase(this.redisProperties.getDatabase());
     redisStandaloneConfiguration.setPassword(this.redisProperties.getPassword());
 
-    // 获得默认的连接池构造器
+    // 기본 연결 풀 생성자 가져오기
     final JedisClientConfiguration.JedisPoolingClientConfigurationBuilder jpcb =
         (JedisClientConfiguration.JedisPoolingClientConfigurationBuilder)
             JedisClientConfiguration.builder();
-    // 指定 jedisPoolConifig 来修改默认的连接池构造器
+    // 기본 연결 풀 생성자를 수정하려면 jedisPoolConifig를 지정하세요.
     jpcb.poolConfig(jedisPoolConfig);
-    // 连接超时
+    // 연결 시간 초과
     jpcb.and().connectTimeout(Duration.ofSeconds(10));
-    // 通过构造器来构造 jedis 客户端配置
+    // 생성자를 통해 jedis 클라이언트 구성 구성하기
     final JedisClientConfiguration jedisClientConfiguration = jpcb.build();
-    // 单机配置 + 客户端配置 = jedis 连接工厂
+    // 독립 실행형 구성 + 클라이언트 구성 = jedis 연결 팩토리
     return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration);
   }
 
   /**
-   * 配置 RedisTemplate，配置 key 和 value 的序列化类
+   * RedisTemplate을 구성하고 키 및 값에 대한 직렬화 클래스를 구성합니다.
    *
-   * <p>key 序列化使用 StringRedisSerializer, 不配置的话，key 会出现乱码
+   * <p> 키 직렬화는 StringRedisSerializer를 사용하여 수행되며, 이 경우 키가 왜곡되어 나타납니다.
    */
   @Bean
   public RedisTemplate redisTemplate(
       @Qualifier(value = "redisConnectionFactory") final RedisConnectionFactory factory) {
     final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
-    // 设置 key 的序列化器为字符串 serializer
+    // 키의 직렬화기를 문자열 직렬화기로 설정합니다.
     final StringRedisSerializer stringSerializer = MyRedisCacheManager.STRING_SERIALIZER;
 
     redisTemplate.setKeySerializer(stringSerializer);
     redisTemplate.setHashKeySerializer(stringSerializer);
 
-    // 设置 value 的序列化器为 fastjson serializer
+    // 값에 대한 직렬화기를 fastjson 직렬화기로 설정합니다.
     final GenericFastJsonRedisSerializer fastSerializer = MyRedisCacheManager.FASTJSON_SERIALIZER;
 
     redisTemplate.setValueSerializer(fastSerializer);
     redisTemplate.setHashValueSerializer(fastSerializer);
 
-    // 如果 KeySerializer 或者 ValueSerializer 没有配置
-    // 则对应的 KeySerializer、ValueSerializer 才使用 fastjson serializer
+    // 키 시리얼라이저 또는 값 시리얼라이저가 구성되지 않은 경우
+    // 그러면 해당 키 직렬화기와 값 직렬화기는 fastjson 직렬화기를 사용합니다.
     redisTemplate.setDefaultSerializer(fastSerializer);
 
     redisTemplate.setConnectionFactory(factory);
